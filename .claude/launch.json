@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ankh-demo",
+      "runtimeExecutable": "cargo",
+      "runtimeArgs": ["xtask", "demo", "--seed"],
+      "port": 8080,
+      "autoPort": false
+    }
+  ]
+}

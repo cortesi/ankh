@@ -1,0 +1,9 @@
+Subject: You're invited to {app_name}
+---
+You've been invited to join {app_name}.
+
+Create your account using this link:
+
+{invite_url}
+
+If you weren't expecting this, you can ignore this email.

@@ -1,0 +1,96 @@
+/*
+ * Demo-app chrome. The @ankh/ui primitives and their `--ankh-*` variables come
+ * from `@ankh/ui/ankh.css`; this only styles the surrounding shell and layout.
+ */
+
+:root {
+  --ankh-bg: #f6f7f9;
+}
+
+body {
+  margin: 0;
+  font-family: var(--ankh-font-family);
+  color: var(--ankh-fg);
+  background: var(--ankh-bg);
+}
+
+.demo-shell {
+  min-height: 100vh;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--ankh-surface);
+  border-bottom: 1px solid var(--ankh-border);
+}
+
+.demo-brand {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ankh-fg);
+}
+
+.demo-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.demo-user {
+  color: var(--ankh-muted-fg);
+}
+
+.demo-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.demo-centered {
+  max-width: 28rem;
+  margin: 3rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.demo-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.demo-dashboard h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.demo-toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  max-width: 24rem;
+}
+
+.demo-detail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+}
+
+.demo-detail dt {
+  color: var(--ankh-muted-fg);
+}
+
+.demo-detail dd {
+  margin: 0;
+}
+
+.demo-org-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

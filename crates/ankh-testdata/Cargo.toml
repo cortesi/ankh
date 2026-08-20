@@ -1,0 +1,22 @@
+[package]
+name = "ankh-testdata"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+ankh-constants = { version = "0.0.1", path = "../ankh-constants" }
+ankh-db = { version = "0.0.1", path = "../ankh-db" }
+ankh-types = { version = "0.0.1", path = "../ankh-types" }
+chrono = { workspace = true, features = ["clock"] }
+tempfile.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+base64 = "0.23.1"
+sha2 = "0.11.0"
+tokio = { workspace = true, features = ["rt"] }

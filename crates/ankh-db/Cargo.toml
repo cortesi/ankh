@@ -1,0 +1,23 @@
+[package]
+name = "ankh-db"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+ankh-constants = { version = "0.0.1", path = "../ankh-constants" }
+ankh-names = { version = "0.0.1", path = "../ankh-names" }
+ankh-types = { version = "0.0.1", path = "../ankh-types" }
+argon2 = { version = "0.5.3", features = ["std"] }
+base64 = "0.23.1"
+chrono.workspace = true
+deadpool-postgres = "0.14.1"
+sha2 = "0.11.0"
+thiserror.workspace = true
+tokio = { workspace = true, features = ["rt"] }
+tokio-postgres = { version = "0.7.18", features = ["with-chrono-0_4", "with-uuid-1"] }
+uuid.workspace = true
+
+[lints]
+workspace = true

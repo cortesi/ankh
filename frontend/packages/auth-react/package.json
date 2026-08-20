@@ -1,0 +1,23 @@
+{
+  "name": "@ankh/auth-react",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "lint": "oxlint",
+    "format": "oxfmt --check",
+    "format:write": "oxfmt"
+  },
+  "dependencies": {
+    "@ankh/types": "file:../types",
+    "@ankh/ui": "file:../ui"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-router-dom": "^7.9.1"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

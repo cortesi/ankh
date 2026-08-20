@@ -1,0 +1,19 @@
+[package]
+name = "ankh-types"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono = { workspace = true, features = ["serde"] }
+dprint-plugin-typescript = "0.96.1"
+serde = { workspace = true, features = ["derive"] }
+ts-rs = { version = "12.0.1", features = ["chrono-impl"] }
+uuid = { workspace = true, features = ["serde", "v4"] }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

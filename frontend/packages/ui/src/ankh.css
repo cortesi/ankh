@@ -1,0 +1,191 @@
+/*
+ * Minimal, unbranded base styles for the @ankh/ui primitives.
+ *
+ * Import once at an app entry point: `import "@ankh/ui/ankh.css";`
+ * Every value is driven by a `--ankh-*` custom property, so a leaf product can
+ * rebrand by overriding these on `:root` (or any ancestor) without forking the
+ * component markup.
+ */
+
+:root {
+  --ankh-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ankh-radius: 0.5rem;
+  --ankh-gap: 0.75rem;
+  --ankh-fg: #1a1a1a;
+  --ankh-muted-fg: #6b7280;
+  --ankh-bg: #ffffff;
+  --ankh-surface: #ffffff;
+  --ankh-border: #d1d5db;
+  --ankh-primary: #2563eb;
+  --ankh-primary-fg: #ffffff;
+  --ankh-danger: #dc2626;
+  --ankh-danger-fg: #ffffff;
+  --ankh-success-bg: #ecfdf5;
+  --ankh-success-fg: #065f46;
+  --ankh-error-bg: #fef2f2;
+  --ankh-error-fg: #991b1b;
+  --ankh-warning-bg: #fffbeb;
+  --ankh-warning-fg: #92400e;
+  --ankh-info-bg: #eff6ff;
+  --ankh-info-fg: #1e40af;
+}
+
+/* Card */
+.ankh-card {
+  display: block;
+  background: var(--ankh-surface);
+  color: var(--ankh-fg);
+  border: 1px solid var(--ankh-border);
+  border-radius: var(--ankh-radius);
+  padding: 1.5rem;
+  font-family: var(--ankh-font-family);
+}
+.ankh-card-header {
+  margin-bottom: var(--ankh-gap);
+}
+.ankh-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.ankh-card-description {
+  margin: 0.25rem 0 0;
+  color: var(--ankh-muted-fg);
+}
+.ankh-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ankh-gap);
+}
+
+/* Fields */
+.ankh-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ankh-gap);
+}
+.ankh-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.ankh-field-label {
+  font-weight: 500;
+  color: var(--ankh-fg);
+}
+.ankh-field-description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ankh-muted-fg);
+}
+.ankh-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ankh-border);
+  border-radius: var(--ankh-radius);
+  background: var(--ankh-bg);
+  color: var(--ankh-fg);
+  font: inherit;
+}
+.ankh-input:focus-visible {
+  outline: 2px solid var(--ankh-primary);
+  outline-offset: 1px;
+}
+
+/* Buttons */
+.ankh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--ankh-radius);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ankh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.ankh-button-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+.ankh-button-md {
+  padding: 0.5rem 1rem;
+}
+.ankh-button-primary {
+  background: var(--ankh-primary);
+  color: var(--ankh-primary-fg);
+}
+.ankh-button-secondary {
+  background: var(--ankh-surface);
+  color: var(--ankh-fg);
+  border-color: var(--ankh-border);
+}
+.ankh-button-ghost {
+  background: transparent;
+  color: var(--ankh-fg);
+}
+.ankh-button-destructive {
+  background: var(--ankh-danger);
+  color: var(--ankh-danger-fg);
+}
+
+/* Alerts */
+.ankh-alert {
+  border-radius: var(--ankh-radius);
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+}
+.ankh-alert-default {
+  background: var(--ankh-info-bg);
+  color: var(--ankh-info-fg);
+}
+.ankh-alert-success {
+  background: var(--ankh-success-bg);
+  color: var(--ankh-success-fg);
+}
+.ankh-alert-error {
+  background: var(--ankh-error-bg);
+  color: var(--ankh-error-fg);
+}
+.ankh-alert-warning {
+  background: var(--ankh-warning-bg);
+  color: var(--ankh-warning-fg);
+}
+
+/* Spinner */
+.ankh-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--ankh-border);
+  border-top-color: var(--ankh-primary);
+  border-radius: 50%;
+  animation: ankh-spin 0.6s linear infinite;
+}
+@keyframes ankh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Table */
+.ankh-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ankh-fg);
+}
+.ankh-table-head,
+.ankh-table-cell {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--ankh-border);
+}
+.ankh-table-head {
+  font-weight: 600;
+  color: var(--ankh-muted-fg);
+}

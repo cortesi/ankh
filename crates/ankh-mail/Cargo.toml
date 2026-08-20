@@ -1,0 +1,17 @@
+[package]
+name = "ankh-mail"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono = { workspace = true, features = ["clock", "std"] }
+thiserror.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

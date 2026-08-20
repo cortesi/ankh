@@ -1,0 +1,15 @@
+{
+  "name": "@ankh/types",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test test/smoke.test.mjs",
+    "lint": "oxlint",
+    "format": "oxfmt --check",
+    "format:write": "oxfmt"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

@@ -1,0 +1,9 @@
+Subject: You're in
+---
+You're off the {app_name} waitlist and can log in now.
+
+Log in here:
+
+{login_url}
+
+If you have any trouble, contact {support_address}.

@@ -1,0 +1,24 @@
+[package]
+name = "ankh-demo"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+ankh-db = { version = "0.0.1", path = "../ankh-db" }
+ankh-mail = { version = "0.0.1", path = "../ankh-mail" }
+ankh-web = { version = "0.0.1", path = "../ankh-web" }
+ankh-testdata = { version = "0.0.1", path = "../ankh-testdata" }
+axum = "0.8.9"
+clap = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "signal"] }
+tower-http = { version = "0.7.0", features = ["fs"] }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+tower = { version = "0.5.3", features = ["util"] }

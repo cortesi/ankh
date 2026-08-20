@@ -1,0 +1,19 @@
+{
+  "name": "@ankh/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ankh.css": "./src/ankh.css"
+  },
+  "scripts": {
+    "test": "node --test test/smoke.test.mjs",
+    "lint": "oxlint",
+    "format": "oxfmt --check",
+    "format:write": "oxfmt"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

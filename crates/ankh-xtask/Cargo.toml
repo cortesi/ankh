@@ -1,0 +1,18 @@
+[package]
+name = "ankh-xtask"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+ankh-db = { version = "0.0.1", path = "../ankh-db" }
+clap.workspace = true
+tokio = { workspace = true, features = ["rt"] }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,31 @@
+[package]
+name = "ankh-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+ankh-types = { version = "0.0.1", path = "../ankh-types" }
+chrono = { workspace = true, features = ["serde", "std", "clock"] }
+clap = { workspace = true }
+comfy-table = "8"
+dirs = "6"
+inquire = "0.9"
+reqwest = { version = "0.13", default-features = false, features = ["json", "query", "rustls"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["macros", "net", "rt-multi-thread"] }
+toml = "1.0"
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+ankh-constants = { path = "../ankh-constants" }
+ankh-db = { path = "../ankh-db" }
+ankh-mail = { path = "../ankh-mail" }
+ankh-testdata = { path = "../ankh-testdata" }
+ankh-web = { path = "../ankh-web" }
+axum = "0.8.9"
