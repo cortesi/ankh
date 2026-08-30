@@ -23,7 +23,8 @@ pub fn run_pnpm(frontend_root: &Path, args: &[&str]) -> XtaskResult {
     run_status(&mut command, &label)
 }
 
-/// Run a pnpm script after installing dependencies from the checked-in lockfile.
+/// Run a pnpm script after installing dependencies from the checked-in
+/// lockfile.
 pub fn run_pnpm_script_with_install(frontend_root: &Path, script: &str) -> XtaskResult {
     ensure_pnpm_dependencies(frontend_root)?;
     run_pnpm(frontend_root, &["run", script])

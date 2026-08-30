@@ -71,7 +71,8 @@ pub fn run_rustfmt(workspace_root: &Path) -> XtaskResult {
     run_status(&mut command, &label)
 }
 
-/// Drive an async action that returns an error from a synchronous xtask context.
+/// Drive an async action that returns an error from a synchronous xtask
+/// context.
 pub fn run_async_result<T, E>(future: impl Future<Output = Result<T, E>>) -> XtaskResult<T>
 where
     E: Error + 'static,

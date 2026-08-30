@@ -100,7 +100,8 @@ pub struct MailBranding {
     pub sender: String,
     /// Support address exposed in templates and shells.
     pub support_address: String,
-    /// Optional HTML shell that receives `{html_body}` plus branding placeholders.
+    /// Optional HTML shell that receives `{html_body}` plus branding
+    /// placeholders.
     pub html_shell: Option<String>,
 }
 
@@ -486,8 +487,9 @@ fn sanitize_artifact_id(id: &str) -> String {
 
 /// Read the most recent development email from `out_dir`.
 ///
-/// Standalone reader for callers that do not hold a [`DevMailer`] (e.g. inspecting
-/// artifacts written by another process); mirrors [`DevMailer::read_latest`].
+/// Standalone reader for callers that do not hold a [`DevMailer`] (e.g.
+/// inspecting artifacts written by another process); mirrors
+/// [`DevMailer::read_latest`].
 pub fn read_latest_dev_mail(out_dir: &Path) -> Result<Option<Email>> {
     let mut paths = list_txt_files(out_dir)?;
     paths.pop().map(|path| read_email(&path)).transpose()
@@ -520,7 +522,8 @@ fn list_txt_files(out_dir: &Path) -> Result<Vec<PathBuf>> {
     Ok(files)
 }
 
-/// Read an `Email` from a `.txt` artifact, pulling in sibling HTML when present.
+/// Read an `Email` from a `.txt` artifact, pulling in sibling HTML when
+/// present.
 fn read_email(txt_path: &Path) -> Result<Email> {
     let mut email = parse_dev_mail_text(fs::read_to_string(txt_path)?.as_str())?;
     let html_path = txt_path.with_extension("html");

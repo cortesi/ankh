@@ -193,7 +193,8 @@ mod tests {
         assert!(!declarations.contains("PlayerSession"));
     }
 
-    /// Proves declaration bodies can be embedded in product-owned generated files.
+    /// Proves declaration bodies can be embedded in product-owned generated
+    /// files.
     #[test]
     fn declaration_body_omits_file_header() {
         let declarations = typescript_declaration_body();

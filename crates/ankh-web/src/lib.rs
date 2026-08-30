@@ -28,7 +28,8 @@ pub use state::{AnkhWebConfig, AnkhWebState, CookieConfig, DeviceAuthConfig};
 
 #[cfg(test)]
 mod tests {
-    //! Smoke tests and ignored DB-backed router tests for the public web harness.
+    //! Smoke tests and ignored DB-backed router tests for the public web
+    //! harness.
 
     use std::{future::Future, sync::Arc};
 
@@ -155,7 +156,8 @@ mod tests {
         .await
     }
 
-    /// Run an async test body inside a fresh database with failing product hooks.
+    /// Run an async test body inside a fresh database with failing product
+    /// hooks.
     async fn with_failing_hook_harness<T, Run, RunFuture>(run: Run) -> ankh_db::Result<T>
     where
         Run: FnOnce(TestAppHarness, FreshDb) -> RunFuture,
@@ -168,7 +170,8 @@ mod tests {
         .await
     }
 
-    /// Run an async test body inside a fresh database with recording admin sinks.
+    /// Run an async test body inside a fresh database with recording admin
+    /// sinks.
     async fn with_recording_admin_harness<T, Run, RunFuture>(run: Run) -> ankh_db::Result<T>
     where
         Run: FnOnce(TestAppHarness, FreshDb, FakeAuditSink, FakeHookRecorder) -> RunFuture,
@@ -357,7 +360,8 @@ mod tests {
         assert!(hooks.take_calls().is_empty());
     }
 
-    /// Proves the in-process router harness can mount with recording mail and fake hooks.
+    /// Proves the in-process router harness can mount with recording mail and
+    /// fake hooks.
     #[test]
     fn test_harness_builds_router_with_recording_mailer() {
         let params = format!("postgresql://localhost:{}/ankh-test", DEFAULT_POSTGRES_PORT);
@@ -377,7 +381,8 @@ mod tests {
         assert!(harness.state().take_hook_failures().is_empty());
     }
 
-    /// Proves shared auth, org, and browser device-session routes work together.
+    /// Proves shared auth, org, and browser device-session routes work
+    /// together.
     #[tokio::test(flavor = "current_thread")]
     async fn router_login_orgs_and_browser_device_session() -> ankh_db::Result<()> {
         with_seeded_harness(|harness, fresh| async move {
@@ -476,7 +481,8 @@ mod tests {
         .await
     }
 
-    /// Proves hook failures do not roll back a successful device-session revoke.
+    /// Proves hook failures do not roll back a successful device-session
+    /// revoke.
     #[tokio::test(flavor = "current_thread")]
     async fn device_revoke_hook_failure_is_recorded_after_db_effect() -> ankh_db::Result<()> {
         with_failing_hook_harness(|harness, fresh| async move {
@@ -579,7 +585,8 @@ mod tests {
         .await
     }
 
-    /// Proves admin user deletion dispatches concrete device-session and namespace hooks.
+    /// Proves admin user deletion dispatches concrete device-session and
+    /// namespace hooks.
     #[tokio::test(flavor = "current_thread")]
     async fn admin_user_delete_dispatches_device_and_namespace_hooks() -> ankh_db::Result<()> {
         with_recording_admin_harness(|harness, fresh, audit, hooks| async move {
@@ -629,7 +636,8 @@ mod tests {
         .await
     }
 
-    /// Proves shared admin session, settings, org, member, transfer, and invite routes compose.
+    /// Proves shared admin session, settings, org, member, transfer, and invite
+    /// routes compose.
     #[tokio::test(flavor = "current_thread")]
     async fn admin_sessions_settings_orgs_members_transfers_and_invites() -> ankh_db::Result<()> {
         with_recording_admin_harness(|harness, fresh, audit, hooks| async move {
@@ -942,7 +950,8 @@ mod tests {
         .await
     }
 
-    /// Proves admin errors use the shared envelope and audit sink failures stay best-effort.
+    /// Proves admin errors use the shared envelope and audit sink failures stay
+    /// best-effort.
     #[tokio::test(flavor = "current_thread")]
     async fn admin_error_envelope_and_audit_sink_failure() -> ankh_db::Result<()> {
         with_fresh_db(seed_identities, |fresh| async move {
@@ -996,7 +1005,8 @@ mod tests {
         .await
     }
 
-    /// Proves shared admin device-session revocation emits product hooks and audit.
+    /// Proves shared admin device-session revocation emits product hooks and
+    /// audit.
     #[tokio::test(flavor = "current_thread")]
     async fn admin_device_session_revoke_dispatches_hook() -> ankh_db::Result<()> {
         with_recording_admin_harness(|harness, fresh, audit, hooks| async move {
@@ -1146,7 +1156,8 @@ mod tests {
             .block_on(future)
     }
 
-    /// Run a test body with a harness whose mailer is a caller-visible recording sink.
+    /// Run a test body with a harness whose mailer is a caller-visible
+    /// recording sink.
     async fn with_mail_harness<T, Run, RunFuture>(run: Run) -> ankh_db::Result<T>
     where
         Run: FnOnce(TestAppHarness, FreshDb, RecordingMailer) -> RunFuture,
@@ -1177,7 +1188,8 @@ mod tests {
         .await
     }
 
-    /// Extract the `token` query-parameter value embedded in a captured email body.
+    /// Extract the `token` query-parameter value embedded in a captured email
+    /// body.
     fn token_from_email(body: &str) -> String {
         let marker = "token=";
         let start = body.find(marker).expect("email body contains a token") + marker.len();
@@ -1315,7 +1327,8 @@ mod tests {
         }))
     }
 
-    /// The forgot/validate/reset password flow rotates credentials and emails a token.
+    /// The forgot/validate/reset password flow rotates credentials and emails a
+    /// token.
     #[test]
     fn password_reset_flow_updates_credentials() -> ankh_db::Result<()> {
         block_on(with_mail_harness(|harness, _fresh, mailer| async move {
@@ -1385,7 +1398,8 @@ mod tests {
         }))
     }
 
-    /// Resending verification for a logged-in unverified user sends a fresh email.
+    /// Resending verification for a logged-in unverified user sends a fresh
+    /// email.
     #[test]
     fn resend_verification_sends_mail() -> ankh_db::Result<()> {
         block_on(with_mail_harness(|harness, _fresh, mailer| async move {
@@ -1421,7 +1435,8 @@ mod tests {
         }))
     }
 
-    /// Repeated failed logins for one email eventually hit the per-email rate limit.
+    /// Repeated failed logins for one email eventually hit the per-email rate
+    /// limit.
     #[test]
     fn login_rate_limit_returns_too_many_requests() -> ankh_db::Result<()> {
         block_on(with_seeded_harness(|harness, _fresh| async move {
@@ -1447,7 +1462,8 @@ mod tests {
         }))
     }
 
-    /// A user can create an org, owns it, appears in its members, and cannot leave as owner.
+    /// A user can create an org, owns it, appears in its members, and cannot
+    /// leave as owner.
     #[test]
     fn public_org_create_membership_and_owner_cannot_leave() -> ankh_db::Result<()> {
         block_on(with_seeded_harness(|harness, _fresh| async move {
@@ -1540,7 +1556,8 @@ mod tests {
         session_cookie(&headers)
     }
 
-    /// Owner invites, cancels, removes a member, and an invitee accepts the seeded invite.
+    /// Owner invites, cancels, removes a member, and an invitee accepts the
+    /// seeded invite.
     #[test]
     fn public_org_invite_cancel_remove_and_accept() -> ankh_db::Result<()> {
         block_on(with_seeded_harness(|harness, fresh| async move {
@@ -1628,8 +1645,9 @@ mod tests {
         }))
     }
 
-    /// A waitlisted user signs up successfully but is blocked (403) from product
-    /// routes, while still reaching endpoints they need (e.g. `me`).
+    /// A waitlisted user signs up successfully but is blocked (403) from
+    /// product routes, while still reaching endpoints they need (e.g.
+    /// `me`).
     #[test]
     fn waitlisted_user_is_forbidden_from_product_routes() -> ankh_db::Result<()> {
         block_on(with_seeded_harness(|harness, fresh| async move {

@@ -54,7 +54,8 @@ pub fn user_detail(detail: DbUserDetail) -> api::UserDetail {
     }
 }
 
-/// Build an admin session summary using the specified timestamp for status evaluation.
+/// Build an admin session summary using the specified timestamp for status
+/// evaluation.
 #[must_use]
 pub fn session_summary_at(summary: DbSessionSummary, now: DateTime<Utc>) -> api::SessionSummary {
     let status = session_status(summary.revoked_at, summary.expires_at, now).to_string();
@@ -70,7 +71,8 @@ pub fn session_summary_at(summary: DbSessionSummary, now: DateTime<Utc>) -> api:
     }
 }
 
-/// Build an admin device-session summary using the specified timestamp for status evaluation.
+/// Build an admin device-session summary using the specified timestamp for
+/// status evaluation.
 #[must_use]
 pub fn device_session_summary_at(
     summary: DbDeviceSessionSummary,

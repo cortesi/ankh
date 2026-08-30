@@ -20,3 +20,6 @@ workspace = true
 base64 = "0.23.1"
 sha2 = "0.11.0"
 tokio = { workspace = true, features = ["rt"] }
+
+[lib]
+doctest = false

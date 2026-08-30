@@ -2,14 +2,14 @@
 
 ## Testing
 
-- `cargo xtask tidy` runs Rust formatting, Rust lints, frontend linting, and
+- `nanocode tidy` runs Rust formatting, Rust lints, frontend linting, and
   frontend formatting checks.
-- `cargo xtask test` starts the local Postgres if it is not already running,
+- `nanocode test` starts the local Postgres if it is not already running,
   runs the Rust tests with `cargo nextest`, then runs the frontend package smoke
   tests. The DB-backed integration tests are part of the default run, so a
-  reachable Postgres is required (`cargo xtask test` provisions it for you).
+  reachable Postgres is required (`nanocode test` provisions it for you).
 
-`cargo nextest` is required for `cargo xtask test`; install it with
+`cargo nextest` is required for `nanocode test`; install it with
 `cargo install cargo-nextest --locked`.
 
 The Ankh frontend workspace uses Node `25.8.1` and pnpm `10.32.1`. Enable
@@ -94,12 +94,12 @@ a change:
 - Remember that `ankh-types` DTO changes force each leaf to regenerate its
   checked-in `generated.d.ts` (the leaves prepend Ankh's shared declarations to
   their own product declarations).
-- Run `cargo xtask check-siblings`, which runs each present leaf's own
-  `cargo xtask tidy` and `cargo xtask test` gates (Rust, generated-TypeScript
+- Run `nanocode check-siblings`, which runs each present leaf's own
+  `nanocode tidy` and `nanocode test` gates (Rust, generated-TypeScript
   freshness, and frontend) against this Ankh working tree. Missing siblings are
   skipped with a note.
 
 ## Continuous integration
 
-There is none. Testing is local-only; `cargo xtask tidy`, `cargo xtask test`,
-and `cargo xtask check-siblings` are the gates.
+There is none. Testing is local-only; `nanocode tidy`, `nanocode test`,
+and `nanocode check-siblings` are the gates.

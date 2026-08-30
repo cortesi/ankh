@@ -37,8 +37,8 @@ for the shared surface and the sibling-checkout layout.
 
 ```sh
 cargo xtask db start    # start the local Postgres used by integration tests
-cargo xtask tidy        # Rust + frontend formatting and lints
-cargo xtask test        # Rust tests (auto-starts Postgres) + frontend smoke tests
+nanocode tidy        # Rust + frontend formatting and lints
+nanocode test        # Rust tests (auto-starts Postgres) + frontend smoke tests
 cargo xtask demo --seed # build the demo UI + run the full stack with seeded identities
 ```
 
@@ -47,5 +47,5 @@ cargo xtask demo --seed # build the demo UI + run the full stack with seeded ide
 `pnpm --filter @ankh/demo-web dev` alongside it.
 
 Testing is local-only; there is no CI. When changing a surface consumed by the
-leaves, run `cargo xtask check-siblings` to validate `../restless` and
+leaves, run `nanocode check-siblings` to validate `../restless` and
 `../verber-web`. See `DEV.md` for details.

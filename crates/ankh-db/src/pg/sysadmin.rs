@@ -36,7 +36,8 @@ pub async fn add_sysadmin(db: &AnkhDb, email: &str, password: &str) -> Result<Sy
     }
 }
 
-/// Authenticates a sysadmin and returns a newly created token plus sysadmin info.
+/// Authenticates a sysadmin and returns a newly created token plus sysadmin
+/// info.
 pub async fn sysadmin_login(
     db: &AnkhDb,
     email: &str,

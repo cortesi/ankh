@@ -121,8 +121,8 @@ pub async fn get_invite_details(
 
 /// Accept an organization invite as the current user.
 ///
-/// Uses [`RequireSession`] (not [`RequireActiveUser`]): accepting an org invite is
-/// an onboarding path that a waitlisted user must be able to complete.
+/// Uses [`RequireSession`] (not [`RequireActiveUser`]): accepting an org invite
+/// is an onboarding path that a waitlisted user must be able to complete.
 pub async fn accept_invite(
     Extension(state): Extension<AnkhWebState>,
     RequireSession(session): RequireSession,

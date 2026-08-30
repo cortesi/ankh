@@ -346,7 +346,8 @@ pub async fn list_users(
     Ok((users, next_cursor))
 }
 
-/// Deletes a user by ID, cascading to sessions and deleting the personal namespace.
+/// Deletes a user by ID, cascading to sessions and deleting the personal
+/// namespace.
 pub async fn delete_user_by_id(db: &AnkhDb, id: UserId) -> Result<()> {
     let row = db
         .client

@@ -29,3 +29,6 @@ ankh-mail = { path = "../ankh-mail" }
 ankh-testdata = { path = "../ankh-testdata" }
 ankh-web = { path = "../ankh-web" }
 axum = "0.8.9"
+
+[lib]
+doctest = false

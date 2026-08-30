@@ -68,19 +68,22 @@ impl AnkhDb {
         Self::with_config(client, AnkhDbConfig::default())
     }
 
-    /// Build an Ankh DB handle from a checked-out pool object and explicit config.
+    /// Build an Ankh DB handle from a checked-out pool object and explicit
+    /// config.
     #[must_use]
     pub fn with_config(client: Object, config: AnkhDbConfig) -> Self {
         Self { client, config }
     }
 
-    /// Return the underlying checked-out Postgres client for colocated product SQL.
+    /// Return the underlying checked-out Postgres client for colocated product
+    /// SQL.
     #[must_use]
     pub fn client(&self) -> &Client {
         &self.client
     }
 
-    /// Return the mutable underlying checked-out Postgres client for colocated product SQL.
+    /// Return the mutable underlying checked-out Postgres client for colocated
+    /// product SQL.
     pub fn client_mut(&mut self) -> &mut Client {
         &mut self.client
     }
@@ -100,7 +103,8 @@ impl AnkhDb {
         self.config.password_hashing.hash_password(password)
     }
 
-    /// Inserts a session row for an existing user using a caller-supplied identifier.
+    /// Inserts a session row for an existing user using a caller-supplied
+    /// identifier.
     async fn insert_session_for_user(
         &self,
         session_id: &str,

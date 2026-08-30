@@ -116,7 +116,8 @@ fn redirect_response(location: &str) -> Response {
     response
 }
 
-/// Build the login redirect target that preserves the original authorize request.
+/// Build the login redirect target that preserves the original authorize
+/// request.
 fn login_redirect_response(login_path: &str, uri: &Uri) -> Response {
     let redirect = url::form_urlencoded::Serializer::new(String::new())
         .append_pair("redirect", uri.to_string().as_str())

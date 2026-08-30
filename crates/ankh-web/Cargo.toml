@@ -29,3 +29,6 @@ ankh-testdata = { path = "../ankh-testdata" }
 serde_json.workspace = true
 tokio = { workspace = true, features = ["macros", "rt"] }
 tower = { version = "0.5.3", features = ["util"] }
+
+[lib]
+doctest = false

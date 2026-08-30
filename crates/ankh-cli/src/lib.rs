@@ -40,7 +40,8 @@ mod tests {
         assert_eq!(custom.default_base_url(), "http://localhost:9000");
     }
 
-    /// The config path resolves to the product's config filename under the home directory.
+    /// The config path resolves to the product's config filename under the home
+    /// directory.
     #[test]
     fn config_path_resolves_under_home_directory() {
         let product = ProductInfo::new("ankh-cli", ".ankh.toml");

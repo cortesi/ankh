@@ -164,7 +164,8 @@ fn next_database_name(prefix: &str) -> String {
     format!("{}_{}_{}", sanitize_identifier(prefix), process::id(), id)
 }
 
-/// Restrict generated identifiers to characters that do not require escaping internally.
+/// Restrict generated identifiers to characters that do not require escaping
+/// internally.
 fn sanitize_identifier(input: &str) -> String {
     let sanitized: String = input
         .chars()

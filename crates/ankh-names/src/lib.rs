@@ -85,7 +85,8 @@ impl NamePolicy {
         Self { product_reserved }
     }
 
-    /// Return whether a namespace name is reserved by either shared or product policy.
+    /// Return whether a namespace name is reserved by either shared or product
+    /// policy.
     #[must_use]
     pub fn is_reserved_namespace_name(&self, name: &str) -> bool {
         let normalized = normalize_name(name);
@@ -164,7 +165,8 @@ pub fn validate_namespace_name(name: &str) -> Result<(), &'static str> {
 /// Return whether a name is reserved by the shared namespace policy.
 ///
 /// Module-level convenience for the default (no product extension) policy; use
-/// [`NamePolicy::is_reserved_namespace_name`] when a product adds reserved names.
+/// [`NamePolicy::is_reserved_namespace_name`] when a product adds reserved
+/// names.
 #[must_use]
 pub fn is_reserved_namespace_name(name: &str) -> bool {
     NamePolicy::shared().is_reserved_namespace_name(name)

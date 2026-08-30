@@ -276,7 +276,8 @@ pub struct DeviceSessionInfo {
     pub expires_at: String,
 }
 
-/// Response body for minting a device session from an authenticated web session.
+/// Response body for minting a device session from an authenticated web
+/// session.
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, TS)]
 pub struct CreateDeviceSessionResponse {
     /// Raw bearer token returned once.

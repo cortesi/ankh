@@ -21,7 +21,8 @@ use crate::{
     state::AnkhWebState,
 };
 
-/// Authentication result that also carries the session token to set as a cookie.
+/// Authentication result that also carries the session token to set as a
+/// cookie.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct AuthSuccess {
     /// Authenticated user info.

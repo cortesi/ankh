@@ -1,7 +1,7 @@
 //! Configuration file handling for Ankh admin CLIs.
 //!
-//! Stores profiles with base URLs and authentication tokens in a product-selected
-//! TOML file.
+//! Stores profiles with base URLs and authentication tokens in a
+//! product-selected TOML file.
 
 use std::{
     collections::HashMap,
@@ -49,7 +49,8 @@ impl Config {
             .ok_or_else(|| Error::Config("could not determine home directory".into()))
     }
 
-    /// Load config from an explicit path, creating an empty config if it doesn't exist.
+    /// Load config from an explicit path, creating an empty config if it
+    /// doesn't exist.
     pub fn load_from_path(path: &Path) -> Result<Self> {
         if !path.exists() {
             return Ok(Self::default());

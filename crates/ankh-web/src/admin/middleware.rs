@@ -9,7 +9,8 @@ use axum::{
 use super::error::AdminError;
 use crate::AnkhWebState;
 
-/// Extractor that validates an admin bearer token and provides the sysadmin info.
+/// Extractor that validates an admin bearer token and provides the sysadmin
+/// info.
 pub struct SysadminAuth(
     /// Authenticated sysadmin info.
     pub SysadminInfo,

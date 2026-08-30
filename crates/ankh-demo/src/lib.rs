@@ -2,11 +2,12 @@
 
 //! Library backing the local Ankh demo server.
 //!
-//! The demo wires the public and admin routers to a Postgres pool and a [`DevMailer`], and serves
-//! the built `@ankh/demo-web` single-page app as the fallback, so the whole identity stack can be
-//! exercised in isolation from the leaf products — in a browser, by the `ankh-cli` admin client,
-//! or by a frontend dev server proxied at the demo port. It is a development and QA tool, not a
-//! production deployment.
+//! The demo wires the public and admin routers to a Postgres pool and a
+//! [`DevMailer`], and serves the built `@ankh/demo-web` single-page app as the
+//! fallback, so the whole identity stack can be exercised in isolation from the
+//! leaf products — in a browser, by the `ankh-cli` admin client,
+//! or by a frontend dev server proxied at the demo port. It is a development
+//! and QA tool, not a production deployment.
 
 use std::{error::Error, path::PathBuf};
 
@@ -19,16 +20,18 @@ use tower_http::services::{ServeDir, ServeFile};
 
 /// Database that `cargo xtask db start` provisions and the demo connects to.
 pub const DEMO_DATABASE: &str = "ankh-test";
-/// Directory the demo writes [`DevMailer`] artifacts into, relative to the working directory.
+/// Directory the demo writes [`DevMailer`] artifacts into, relative to the
+/// working directory.
 pub const MAIL_OUT_DIR: &str = "tmp/mail";
 
-/// Build the merged public + admin router wired to demo-friendly state, with the built
-/// `@ankh/demo-web` single-page app served as the fallback.
+/// Build the merged public + admin router wired to demo-friendly state, with
+/// the built `@ankh/demo-web` single-page app served as the fallback.
 ///
-/// `base_url` should match the address the server will actually be reached at so links in
-/// captured mail are clickable; `mail_dir` receives [`DevMailer`] artifacts. Requests that match
-/// no API or admin route fall through to the SPA at [`frontend_dist_dir`]; when that bundle has
-/// not been built (e.g. `--no-frontend`), those requests simply 404.
+/// `base_url` should match the address the server will actually be reached at
+/// so links in captured mail are clickable; `mail_dir` receives [`DevMailer`]
+/// artifacts. Requests that match no API or admin route fall through to the SPA
+/// at [`frontend_dist_dir`]; when that bundle has not been built (e.g.
+/// `--no-frontend`), those requests simply 404.
 pub fn build_app(
     pool: AnkhDbPool,
     base_url: &str,
@@ -42,22 +45,26 @@ pub fn build_app(
         .layer(Extension(state)))
 }
 
-/// Directory the built `@ankh/demo-web` bundle is emitted to (see its `vite.config.ts`).
+/// Directory the built `@ankh/demo-web` bundle is emitted to (see its
+/// `vite.config.ts`).
 pub fn frontend_dist_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("dist")
 }
 
-/// Serve the SPA bundle, falling back to `index.html` so client-side routes resolve on reload.
+/// Serve the SPA bundle, falling back to `index.html` so client-side routes
+/// resolve on reload.
 fn spa_service() -> ServeDir<ServeFile> {
     let dist = frontend_dist_dir();
     let index = dist.join("index.html");
     ServeDir::new(dist).fallback(ServeFile::new(index))
 }
 
-/// Assemble the shared web state with HTTP-localhost-friendly cookies and a dev mailer.
+/// Assemble the shared web state with HTTP-localhost-friendly cookies and a dev
+/// mailer.
 ///
-/// The session cookie's `Secure` attribute is cleared so cookie auth works over plain HTTP on
-/// localhost (the default is `true`, which browsers drop over HTTP).
+/// The session cookie's `Secure` attribute is cleared so cookie auth works over
+/// plain HTTP on localhost (the default is `true`, which browsers drop over
+/// HTTP).
 fn build_state(
     pool: AnkhDbPool,
     base_url: &str,

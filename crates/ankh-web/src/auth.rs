@@ -272,9 +272,9 @@ where
 /// Extractor that requires a valid web session for a non-waitlisted user.
 ///
 /// Resolves the session like [`RequireSession`], then rejects with 403 when the
-/// account is waitlisted. Use this on product routes that a waitlisted user must
-/// not reach; use [`RequireSession`] for routes a waitlisted user still needs
-/// (e.g. `me`, `logout`, waitlist status).
+/// account is waitlisted. Use this on product routes that a waitlisted user
+/// must not reach; use [`RequireSession`] for routes a waitlisted user still
+/// needs (e.g. `me`, `logout`, waitlist status).
 pub struct RequireActiveUser(
     /// Session data for the authenticated, non-waitlisted user.
     pub Session,

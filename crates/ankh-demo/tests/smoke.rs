@@ -2,10 +2,12 @@
 
 #[cfg(test)]
 mod tests {
-    //! Drives the merged public/admin router in-process (via `tower`'s `oneshot`) against a fresh
-    //! database, asserting the demo-specific wiring: HTTP-friendly (non-`Secure`) session cookies
-    //! and a [`ankh_mail::DevMailer`] that persists captured mail to disk. The admin login
-    //! exercises the admin router that `ankh-cli` targets over HTTP.
+    //! Drives the merged public/admin router in-process (via `tower`'s
+    //! `oneshot`) against a fresh database, asserting the demo-specific
+    //! wiring: HTTP-friendly (non-`Secure`) session cookies
+    //! and a [`ankh_mail::DevMailer`] that persists captured mail to disk. The
+    //! admin login exercises the admin router that `ankh-cli` targets over
+    //! HTTP.
 
     use ankh_db::{Result as DbResult, test_support::with_fresh_db};
     use ankh_demo::build_app;
@@ -40,8 +42,8 @@ mod tests {
             )
             .expect("build demo app");
 
-            // Public login as the seeded verified user succeeds and sets a non-Secure cookie,
-            // proving the demo's HTTP-localhost cookie configuration.
+            // Public login as the seeded verified user succeeds and sets a non-Secure
+            // cookie, proving the demo's HTTP-localhost cookie configuration.
             let login = app
                 .clone()
                 .oneshot(json_request(
@@ -85,8 +87,8 @@ mod tests {
                 ALICE.email
             );
 
-            // The admin router (the surface ankh-cli drives over HTTP) authenticates the seeded
-            // sysadmin and returns a token.
+            // The admin router (the surface ankh-cli drives over HTTP) authenticates the
+            // seeded sysadmin and returns a token.
             let admin_login = app
                 .clone()
                 .oneshot(json_request(

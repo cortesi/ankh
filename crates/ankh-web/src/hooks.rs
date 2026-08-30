@@ -59,7 +59,8 @@ pub trait ProductHooks: Send + Sync {
     /// Called after a namespace has been reinstated.
     async fn on_namespace_reinstated(&self, payload: NamespaceStatusChanged) -> Result<(), String>;
 
-    /// Called before or after namespaces are deleted, depending on the owning product path.
+    /// Called before or after namespaces are deleted, depending on the owning
+    /// product path.
     async fn on_namespaces_deleted(&self, payload: Vec<NamespaceDeleted>) -> Result<(), String>;
 
     /// Called after device sessions have been revoked.

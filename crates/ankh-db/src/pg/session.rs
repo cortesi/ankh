@@ -100,7 +100,8 @@ pub async fn get_session(db: &AnkhDb, session_id: &str) -> Result<Session> {
     Ok(AnkhDb::session_from_row(&row))
 }
 
-/// Refreshes the `touched_at` timestamp for a session and returns session details.
+/// Refreshes the `touched_at` timestamp for a session and returns session
+/// details.
 pub async fn touch_session(db: &AnkhDb, session_id: &str) -> Result<Session> {
     let session_hash = hash_secret(session_id);
     db.client
@@ -126,7 +127,8 @@ pub async fn touch_session(db: &AnkhDb, session_id: &str) -> Result<Session> {
     Ok(AnkhDb::session_from_row(&row))
 }
 
-/// Touches a session only if the last touch timestamp is older than the supplied threshold.
+/// Touches a session only if the last touch timestamp is older than the
+/// supplied threshold.
 pub async fn touch_session_if_stale(
     db: &mut AnkhDb,
     session_id: &str,

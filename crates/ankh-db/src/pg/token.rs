@@ -64,7 +64,8 @@ pub async fn consume_token(db: &mut AnkhDb, token: &str, kind: TokenKind) -> Res
     Ok(email)
 }
 
-/// Validate a token without consuming it, returning the associated email address.
+/// Validate a token without consuming it, returning the associated email
+/// address.
 pub async fn peek_token(db: &AnkhDb, token: &str, kind: TokenKind) -> Result<String> {
     let token_hash = hash_secret(token);
     let kind = kind.as_str();

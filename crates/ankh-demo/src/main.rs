@@ -10,7 +10,8 @@ use ankh_testdata::seed_identity_rows;
 use clap::Parser;
 use tokio::{net::TcpListener, signal::ctrl_c};
 
-/// Maximum number of sequential ports tried when the requested HTTP port is busy.
+/// Maximum number of sequential ports tried when the requested HTTP port is
+/// busy.
 const PORT_SCAN_LIMIT: u16 = 20;
 /// Pool size for the demo server.
 const POOL_MAX_SIZE: u32 = 8;
@@ -28,7 +29,8 @@ struct Args {
     /// Postgres port to connect to (the workspace dev instance).
     #[arg(long, default_value_t = DEFAULT_POSTGRES_PORT)]
     db_port: u16,
-    /// Seed deterministic demo identities (users, sysadmin, org) before serving.
+    /// Seed deterministic demo identities (users, sysadmin, org) before
+    /// serving.
     #[arg(long)]
     seed: bool,
 }
@@ -76,7 +78,8 @@ async fn seed_and_report(pool: &AnkhDbPool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Bind the requested port, scanning forward to the next free port if it is in use.
+/// Bind the requested port, scanning forward to the next free port if it is in
+/// use.
 async fn bind_with_discovery(port: u16) -> Result<TcpListener, Box<dyn Error>> {
     for candidate in port..port.saturating_add(PORT_SCAN_LIMIT) {
         match TcpListener::bind(("127.0.0.1", candidate)).await {

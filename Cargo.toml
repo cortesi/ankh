@@ -44,3 +44,17 @@ tempfile = "3"
 thiserror = "2"
 tokio = { version = "1", default-features = false }
 uuid = { version = "1", features = ["v4"] }
+
+[workspace.metadata.nanocode]
+schema-version = 1
+requires-nanocode = ">=0.1, <0.2"
+features = "all"
+test-setup = [["cargo", "xtask", "db", "start"]]
+test-hooks = [["cargo", "xtask", "frontend-test"]]
+tidy-hooks = [["cargo", "xtask", "generated-types"], ["cargo", "xtask", "frontend-lint"]]
+
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

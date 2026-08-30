@@ -89,7 +89,8 @@ impl KvTable {
         Self(Table::new())
     }
 
-    /// Add a key/value row. `value` is any `ToString`, including `&String`, `&str`, or `bool`.
+    /// Add a key/value row. `value` is any `ToString`, including `&String`,
+    /// `&str`, or `bool`.
     fn row<V: ToString>(mut self, key: &str, value: V) -> Self {
         self.0.add_row(vec![Cell::new(key), Cell::new(value)]);
         self

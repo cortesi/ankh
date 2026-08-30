@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 use uuid::Uuid;
 
-/// Generates a UUID-backed identifier newtype with standard trait implementations.
+/// Generates a UUID-backed identifier newtype with standard trait
+/// implementations.
 macro_rules! uuid_id {
     ($(#[$meta:meta])* $name:ident) => {
         $(#[$meta])*

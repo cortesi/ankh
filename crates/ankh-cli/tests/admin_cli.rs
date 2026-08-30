@@ -269,7 +269,8 @@ mod tests {
         assert!(old_flag.is_err());
     }
 
-    /// Proves common commands use persisted auth and mutate through real routes.
+    /// Proves common commands use persisted auth and mutate through real
+    /// routes.
     #[tokio::test(flavor = "current_thread")]
     async fn common_commands_use_saved_profile_and_real_admin_routes() -> ankh_db::Result<()> {
         with_fresh_db(seed_identities, |fresh| async move {
@@ -424,7 +425,8 @@ mod tests {
         .await
     }
 
-    /// Exercises settings/waitlist, user invite/release, and the full org lifecycle via the CLI.
+    /// Exercises settings/waitlist, user invite/release, and the full org
+    /// lifecycle via the CLI.
     #[tokio::test(flavor = "current_thread")]
     async fn cli_covers_settings_waitlist_users_and_org_lifecycle() -> ankh_db::Result<()> {
         with_fresh_db(seed_identities, |fresh| async move {
@@ -580,7 +582,8 @@ mod tests {
         .await
     }
 
-    /// Proves client query construction and both output formats against real responses.
+    /// Proves client query construction and both output formats against real
+    /// responses.
     #[tokio::test(flavor = "current_thread")]
     async fn client_query_support_and_renderers_use_real_responses() -> ankh_db::Result<()> {
         with_fresh_db(seed_identities, |fresh| async move {

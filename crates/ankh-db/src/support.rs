@@ -111,8 +111,8 @@ impl Default for PasswordHashing {
 
 /// Hash a raw secret for database storage.
 ///
-/// Secrets are stored as lowercase hex-encoded SHA-256 digests to avoid leaking raw values through
-/// database access.
+/// Secrets are stored as lowercase hex-encoded SHA-256 digests to avoid leaking
+/// raw values through database access.
 #[must_use]
 pub fn hash_secret(secret: &str) -> String {
     let mut hasher = Sha256::new();

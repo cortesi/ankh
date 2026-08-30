@@ -31,7 +31,8 @@ impl Default for CookieConfig {
 /// Device authorization route configuration.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DeviceAuthConfig {
-    /// Browser login path used when a device authorize request has no web session.
+    /// Browser login path used when a device authorize request has no web
+    /// session.
     pub login_path: String,
 }
 

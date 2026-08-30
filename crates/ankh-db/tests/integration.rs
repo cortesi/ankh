@@ -1,9 +1,10 @@
-//! DB-layer integration tests exercising `AnkhDb` against a fresh Postgres database.
+//! DB-layer integration tests exercising `AnkhDb` against a fresh Postgres
+//! database.
 
 #[cfg(test)]
 mod tests {
-    //! These run against the workspace Postgres (`cargo xtask db start`); `cargo xtask test`
-    //! provisions it automatically.
+    //! These run against the workspace Postgres (`cargo xtask db start`);
+    //! `cargo xtask test` provisions it automatically.
 
     use std::{collections::HashSet, future::Future, time::Duration};
 
@@ -13,7 +14,8 @@ mod tests {
     };
     use tokio::runtime::Builder as TokioRuntimeBuilder;
 
-    /// PKCE verifier and its matching S256 challenge (shared with the web router tests).
+    /// PKCE verifier and its matching S256 challenge (shared with the web
+    /// router tests).
     const PKCE_VERIFIER: &str = "test-device-verifier";
     /// Precomputed S256 challenge for [`PKCE_VERIFIER`].
     const PKCE_CHALLENGE: &str = "-h3fMaFx46QpbqSYNy5y8dFicxDubLWG6tjHbsu4rcw";
@@ -24,8 +26,8 @@ mod tests {
 
     /// Drive an async test body on a current-thread runtime.
     ///
-    /// `ankh-db` deliberately depends on tokio without the `macros` feature, so tests use an
-    /// explicit runtime rather than `#[tokio::test]`.
+    /// `ankh-db` deliberately depends on tokio without the `macros` feature, so
+    /// tests use an explicit runtime rather than `#[tokio::test]`.
     fn block_on<F: Future>(future: F) -> F::Output {
         TokioRuntimeBuilder::new_current_thread()
             .enable_all()

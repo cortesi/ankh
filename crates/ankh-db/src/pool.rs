@@ -20,13 +20,15 @@ pub struct AnkhDbPool {
 }
 
 impl AnkhDbPool {
-    /// Build an Ankh pool from a raw Postgres pool and default Ankh configuration.
+    /// Build an Ankh pool from a raw Postgres pool and default Ankh
+    /// configuration.
     #[must_use]
     pub(crate) fn from_raw_pool(pool: Pool) -> Self {
         Self::from_raw_pool_with_config(pool, AnkhDbConfig::default())
     }
 
-    /// Build an Ankh pool from a raw Postgres pool and explicit Ankh configuration.
+    /// Build an Ankh pool from a raw Postgres pool and explicit Ankh
+    /// configuration.
     #[must_use]
     pub(crate) fn from_raw_pool_with_config(pool: Pool, config: AnkhDbConfig) -> Self {
         Self { pool, config }

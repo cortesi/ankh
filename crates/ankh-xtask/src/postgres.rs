@@ -129,7 +129,8 @@ pub struct PostgresStatus {
     pub running: bool,
     /// True when `pg_isready` succeeds on the configured port.
     pub healthy: bool,
-    /// True when another server occupies the port while this data dir is stopped.
+    /// True when another server occupies the port while this data dir is
+    /// stopped.
     pub conflict: bool,
 }
 
@@ -312,7 +313,8 @@ pub fn run_psql(config: &PostgresConfig<'_>, database: &str) -> XtaskResult {
     )
 }
 
-/// Reset a database by dropping tables, bootstrapping schemas, and seeding fixtures.
+/// Reset a database by dropping tables, bootstrapping schemas, and seeding
+/// fixtures.
 pub fn run_reset_db<Bootstrap, Seed>(
     config: &PostgresConfig<'_>,
     database: &str,

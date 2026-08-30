@@ -148,7 +148,8 @@ pub struct AppSettings {
     pub waitlist_enabled: bool,
 }
 
-/// Namespace status change returned after updating edge-visible namespace state.
+/// Namespace status change returned after updating edge-visible namespace
+/// state.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NamespaceStatusUpdate {
     /// Namespace name used as the durable identity.

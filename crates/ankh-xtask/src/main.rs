@@ -5,14 +5,12 @@
 use std::{
     error::Error,
     path::{Path, PathBuf},
-    process,
+    process::{self, Command},
 };
 
 use ankh_db::{create_pg_pool_with_max_size, test_support::DEFAULT_POSTGRES_PORT};
 use ankh_xtask::{
-    command::{
-        binary_available, exec_cargo, run_async_result, run_rustfmt, workspace_root_from_manifest,
-    },
+    command::{exec_cargo, run_async_result, run_status, workspace_root_from_manifest},
     frontend::{ensure_pnpm_dependencies, run_pnpm, run_pnpm_script_with_install},
     postgres::{self, DbRequest, PostgresConfig, PostgresPaths, SeedMode},
 };
@@ -51,16 +49,20 @@ enum TaskCommand {
     /// Manage the local Ankh Postgres instance used by DB integration tests.
     #[command(name = "db", subcommand)]
     Db(DbCommand),
-    /// Run Rust and frontend tests.
-    #[command(name = "test")]
-    Test(PassthroughArgs),
-    /// Run formatting and lint checks across the workspace.
-    #[command(name = "tidy")]
-    Tidy(PassthroughArgs),
+    /// Run frontend tests.
+    #[command(name = "frontend-test")]
+    FrontendTest,
+    /// Check that generated TypeScript declarations are current.
+    #[command(name = "generated-types")]
+    GeneratedTypes,
+    /// Run frontend lint and format checks.
+    #[command(name = "frontend-lint")]
+    FrontendLint,
     /// Run the leaf consumers' gates against this Ankh working tree.
     #[command(name = "check-siblings")]
     CheckSiblings,
-    /// Run the local demo server (the full Ankh stack) against the dev Postgres.
+    /// Run the local demo server (the full Ankh stack) against the dev
+    /// Postgres.
     #[command(name = "demo")]
     Demo(DemoArgs),
 }
@@ -77,21 +79,10 @@ struct DemoArgs {
     /// Drop and recreate the database before serving.
     #[arg(long)]
     reset: bool,
-    /// Skip building the demo frontend (serve a previously built bundle, or run Vite separately).
+    /// Skip building the demo frontend (serve a previously built bundle, or run
+    /// Vite separately).
     #[arg(long)]
     no_frontend: bool,
-}
-
-/// Collector for passthrough arguments forwarded to cargo invocations.
-#[derive(Args, Default)]
-struct PassthroughArgs {
-    /// Arguments forwarded to cargo invocations.
-    #[arg(
-        trailing_var_arg = true,
-        allow_hyphen_values = true,
-        value_name = "ARGS"
-    )]
-    passthrough: Vec<String>,
 }
 
 /// Local Postgres lifecycle commands.
@@ -132,14 +123,16 @@ fn run() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
     match cli.command {
         TaskCommand::Db(command) => run_db(&command),
-        TaskCommand::Test(args) => run_test(&args.passthrough),
-        TaskCommand::Tidy(args) => run_tidy(&args.passthrough),
+        TaskCommand::FrontendTest => run_pnpm_script_with_install(&frontend_root(), "test"),
+        TaskCommand::GeneratedTypes => check_generated_typescript(),
+        TaskCommand::FrontendLint => run_frontend_lint(),
         TaskCommand::CheckSiblings => run_check_siblings(),
         TaskCommand::Demo(args) => run_demo(&args),
     }
 }
 
-/// Ensure Postgres is ready (recreating it on `--reset`), then launch the demo server.
+/// Ensure Postgres is ready (recreating it on `--reset`), then launch the demo
+/// server.
 fn run_demo(args: &DemoArgs) -> Result<(), Box<dyn Error>> {
     if args.reset {
         let request = DbRequest {
@@ -173,21 +166,25 @@ fn run_demo(args: &DemoArgs) -> Result<(), Box<dyn Error>> {
     )
 }
 
-/// Build the `@ankh/demo-web` SPA into the `ankh-demo` crate's `dist/` so the server can serve it.
+/// Build the `@ankh/demo-web` SPA into the `ankh-demo` crate's `dist/` so the
+/// server can serve it.
 fn build_demo_frontend() -> Result<(), Box<dyn Error>> {
     let frontend = frontend_root();
     ensure_pnpm_dependencies(&frontend)?;
     run_pnpm(&frontend, &["--filter", "@ankh/demo-web", "run", "build"])
 }
 
-/// Leaf consumer checkouts validated by `check-siblings`, relative to the Ankh root's parent.
+/// Leaf consumer checkouts validated by `check-siblings`, relative to the Ankh
+/// root's parent.
 const SIBLING_CONSUMERS: [&str; 2] = ["restless", "verber-web"];
 
-/// Run each present leaf consumer's own `tidy` and `test` gates against this Ankh tree.
+/// Run each present leaf consumer's own `tidy` and `test` gates against this
+/// Ankh tree.
 ///
-/// Both leaves consume Ankh through sibling path/`file:` dependencies, so an Ankh change can
-/// break them. Each leaf's `cargo xtask tidy`/`test` is its full gate (Rust, generated
-/// TypeScript freshness, and frontend), so this delegates rather than reimplementing them.
+/// Both leaves consume Ankh through sibling path/`file:` dependencies, so an
+/// Ankh change can break them. Each leaf's `cargo xtask tidy`/`test` is its
+/// full gate (Rust, generated TypeScript freshness, and frontend), so this
+/// delegates rather than reimplementing them.
 fn run_check_siblings() -> Result<(), Box<dyn Error>> {
     let Some(siblings_root) = workspace_root().parent().map(Path::to_path_buf) else {
         return Err("cannot resolve the parent directory of the Ankh workspace".into());
@@ -201,8 +198,8 @@ fn run_check_siblings() -> Result<(), Box<dyn Error>> {
             continue;
         }
         println!("== checking sibling `{consumer}` at {}", dir.display());
-        exec_cargo(&dir, &["xtask", "tidy"], &[])?;
-        exec_cargo(&dir, &["xtask", "test"], &[])?;
+        exec_nanocode(&dir, "tidy")?;
+        exec_nanocode(&dir, "test")?;
         checked += 1;
     }
 
@@ -214,27 +211,13 @@ fn run_check_siblings() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Run Rust and frontend tests against a guaranteed-reachable local Postgres.
-///
-/// DB-backed integration tests connect to the workspace Postgres, so this starts it first (or
-/// fails with a clear message if a foreign server occupies the port). Rust tests run under
-/// `cargo nextest`, the standard runner for this workspace; the frontend smoke tests run after.
-fn run_test(passthrough: &[String]) -> Result<(), Box<dyn Error>> {
-    ensure_test_postgres()?;
-
-    if !binary_available("cargo-nextest") {
-        return Err(
-            "cargo-nextest is required for `cargo xtask test`; install it with \
-             `cargo install cargo-nextest --locked`"
-                .into(),
-        );
-    }
-    exec_cargo(
-        &workspace_root(),
-        &["nextest", "run", "--all-features"],
-        passthrough,
-    )?;
-    run_pnpm_script_with_install(&frontend_root(), "test")
+/// Run one standard nanocode command in a sibling workspace.
+fn exec_nanocode(workspace: &Path, command_name: &str) -> Result<(), Box<dyn Error>> {
+    let mut command = Command::new("nanocode");
+    command.current_dir(workspace).arg(command_name);
+    let label = format!("nanocode {command_name}");
+    println!("-> {label}");
+    run_status(&mut command, &label)
 }
 
 /// Ensure the workspace Postgres used by DB integration tests is running.
@@ -246,26 +229,8 @@ fn ensure_test_postgres() -> Result<(), Box<dyn Error>> {
     )
 }
 
-/// Run formatting and lint checks.
-fn run_tidy(passthrough: &[String]) -> Result<(), Box<dyn Error>> {
-    let root = workspace_root();
-    run_rustfmt(&root)?;
-    check_generated_typescript()?;
-    exec_cargo(
-        &root,
-        &[
-            "clippy",
-            "-q",
-            "--all-targets",
-            "--all-features",
-            "--tests",
-            "--examples",
-            "--",
-            "-D",
-            "warnings",
-        ],
-        passthrough,
-    )?;
+/// Run frontend lint and format checks.
+fn run_frontend_lint() -> Result<(), Box<dyn Error>> {
     run_pnpm_script_with_install(&frontend_root(), "lint")?;
     run_pnpm_script_with_install(&frontend_root(), "format")
 }

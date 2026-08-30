@@ -45,7 +45,8 @@ pub async fn consume_invite(db: &AnkhDb, token: &str) -> Result<String> {
     Ok(email)
 }
 
-/// Validate an invite token without consuming it, returning the associated email address.
+/// Validate an invite token without consuming it, returning the associated
+/// email address.
 pub async fn peek_invite(db: &AnkhDb, token: &str) -> Result<String> {
     let token_hash = hash_secret(token);
     let row = db
