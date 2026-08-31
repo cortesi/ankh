@@ -198,8 +198,8 @@ fn run_check_siblings() -> Result<(), Box<dyn Error>> {
             continue;
         }
         println!("== checking sibling `{consumer}` at {}", dir.display());
-        exec_nanocode(&dir, "tidy")?;
-        exec_nanocode(&dir, "test")?;
+        exec_ncode(&dir, "tidy")?;
+        exec_ncode(&dir, "test")?;
         checked += 1;
     }
 
@@ -211,11 +211,11 @@ fn run_check_siblings() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Run one standard nanocode command in a sibling workspace.
-fn exec_nanocode(workspace: &Path, command_name: &str) -> Result<(), Box<dyn Error>> {
-    let mut command = Command::new("nanocode");
+/// Run one standard Nanocode command in a sibling workspace.
+fn exec_ncode(workspace: &Path, command_name: &str) -> Result<(), Box<dyn Error>> {
+    let mut command = Command::new("ncode");
     command.current_dir(workspace).arg(command_name);
-    let label = format!("nanocode {command_name}");
+    let label = format!("ncode {command_name}");
     println!("-> {label}");
     run_status(&mut command, &label)
 }
