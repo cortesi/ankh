@@ -11,6 +11,8 @@ use std::{
 
 use tokio::runtime::Builder as TokioRuntimeBuilder;
 
+use crate::cargo_env;
+
 /// Result type used by xtask helpers.
 pub type XtaskResult<T = ()> = Result<T, Box<dyn Error>>;
 
@@ -33,7 +35,7 @@ pub fn exec_cargo(
     base_args: &[&str],
     passthrough: &[String],
 ) -> XtaskResult {
-    let mut command = Command::new("cargo");
+    let mut command = cargo_env::command("cargo");
     command.current_dir(workspace_root);
     command.args(base_args);
     command.args(passthrough);
@@ -46,7 +48,7 @@ pub fn exec_cargo(
 /// Run rustfmt using `rustfmt-nightly.toml` when the workspace provides it.
 pub fn run_rustfmt(workspace_root: &Path) -> XtaskResult {
     let rustfmt_config = workspace_root.join("rustfmt-nightly.toml");
-    let mut command = Command::new("cargo");
+    let mut command = cargo_env::command("cargo");
     command.current_dir(workspace_root);
 
     let label = if rustfmt_config.exists() {

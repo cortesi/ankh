@@ -1,11 +1,11 @@
 //! Shared helpers for dev admin CLI auto-authentication.
 
-use std::{
-    path::{Path, PathBuf},
-    process::Command,
-};
+use std::path::{Path, PathBuf};
 
-use crate::command::{XtaskResult, run_status};
+use crate::{
+    cargo_env,
+    command::{XtaskResult, run_status},
+};
 
 /// Cargo-run target for a leaf admin CLI binary.
 #[derive(Debug, Clone)]
@@ -69,7 +69,7 @@ pub fn ensure_admin_login(cli: &CargoAdminCli, login: &AdminLogin) -> XtaskResul
 
 /// Run a leaf CLI package through Cargo with the supplied arguments.
 pub fn run_cli(cli: &CargoAdminCli, args: &[String]) -> XtaskResult {
-    let mut command = Command::new("cargo");
+    let mut command = cargo_env::command("cargo");
     command.current_dir(&cli.workspace_root);
     command.args(["run", "-q", "-p", &cli.package, "--"]);
     command.args(args);

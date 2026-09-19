@@ -2,10 +2,12 @@
 
 //! Developer task runner for the Ankh workspace.
 
+mod cargo_env;
+
 use std::{
     error::Error,
     path::{Path, PathBuf},
-    process::{self, Command},
+    process,
 };
 
 use ankh_db::{create_pg_pool_with_max_size, test_support::DEFAULT_POSTGRES_PORT};
@@ -213,7 +215,7 @@ fn run_check_siblings() -> Result<(), Box<dyn Error>> {
 
 /// Run one standard Nanocode command in a sibling workspace.
 fn exec_ncode(workspace: &Path, command_name: &str) -> Result<(), Box<dyn Error>> {
-    let mut command = Command::new("ncode");
+    let mut command = cargo_env::command("ncode");
     command.current_dir(workspace).arg(command_name);
     let label = format!("ncode {command_name}");
     println!("-> {label}");

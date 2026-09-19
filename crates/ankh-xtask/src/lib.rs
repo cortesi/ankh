@@ -2,6 +2,8 @@
 
 //! Shared developer-task building blocks for Ankh and leaf workspaces.
 
+mod cargo_env;
+
 /// Dev admin CLI helpers.
 pub mod admin;
 /// Command execution helpers.
