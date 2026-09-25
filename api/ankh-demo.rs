@@ -21,6 +21,13 @@ use ankh_db::AnkhDbPool;
 use ankh_testdata::SeededIdentityIds;
 use axum::Router;
 
+/// Database that `cargo xtask db start` provisions and the demo connects to.
+pub const DEMO_DATABASE: &str = "ankh-test";
+
+/// Directory the demo writes [`DevMailer`] artifacts into, relative to the
+/// working directory.
+pub const MAIL_OUT_DIR: &str = "tmp/mail";
+
 /// Build the merged public + admin router wired to demo-friendly state, with
 /// the built `@ankh/demo-web` single-page app served as the fallback.
 ///
@@ -41,10 +48,3 @@ pub fn frontend_dist_dir() -> PathBuf;
 
 /// Print the login credentials produced by seeding.
 pub fn report_seeded(ids: &SeededIdentityIds);
-
-/// Database that `cargo xtask db start` provisions and the demo connects to.
-pub const DEMO_DATABASE: &str = "ankh-test";
-
-/// Directory the demo writes [`DevMailer`] artifacts into, relative to the
-/// working directory.
-pub const MAIL_OUT_DIR: &str = "tmp/mail";

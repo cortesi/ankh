@@ -14,6 +14,33 @@ use ankh_types::{OrgId, OrgRole, UserId};
 use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
+/// Primary sysadmin fixture.
+pub const ADMIN: SysadminFixture = _;
+
+/// Primary verified user fixture.
+pub const ALICE: UserFixture = _;
+
+/// Web-session token seeded for [`ALICE`].
+pub const ALICE_SESSION_TOKEN: &str = "11111111-1111-1111-1111-111111111111";
+
+/// Secondary unverified user fixture.
+pub const BOB: UserFixture = _;
+
+/// Web-session token seeded for [`BOB`].
+pub const BOB_SESSION_TOKEN: &str = "22222222-2222-2222-2222-222222222222";
+
+/// Default organization fixture.
+pub const DEFAULT_ORG: OrgFixture = _;
+
+/// Shared mail branding fixture.
+pub const MAIL: MailFixture = _;
+
+/// Pending organization invite fixture.
+pub const PENDING_ORG_INVITE: OrgInviteFixture = _;
+
+/// Default session expiry used for seeded accounts.
+pub const SESSION_TTL: Duration = DEFAULT_SESSION_TTL;
+
 /// Fixed clock used by deterministic tests.
 #[derive(
     Clone,
@@ -183,30 +210,3 @@ pub async fn seed_identities(pool: AnkhDbPool) -> ankh_db::Result<()>;
 
 /// Seed deterministic shared identity rows on an already checked-out handle.
 pub async fn seed_identity_rows(db: &mut AnkhDb) -> ankh_db::Result<SeededIdentityIds>;
-
-/// Primary sysadmin fixture.
-pub const ADMIN: SysadminFixture = _;
-
-/// Primary verified user fixture.
-pub const ALICE: UserFixture = _;
-
-/// Web-session token seeded for [`ALICE`].
-pub const ALICE_SESSION_TOKEN: &str = "11111111-1111-1111-1111-111111111111";
-
-/// Secondary unverified user fixture.
-pub const BOB: UserFixture = _;
-
-/// Web-session token seeded for [`BOB`].
-pub const BOB_SESSION_TOKEN: &str = "22222222-2222-2222-2222-222222222222";
-
-/// Default organization fixture.
-pub const DEFAULT_ORG: OrgFixture = _;
-
-/// Shared mail branding fixture.
-pub const MAIL: MailFixture = _;
-
-/// Pending organization invite fixture.
-pub const PENDING_ORG_INVITE: OrgInviteFixture = _;
-
-/// Default session expiry used for seeded accounts.
-pub const SESSION_TTL: Duration = DEFAULT_SESSION_TTL;

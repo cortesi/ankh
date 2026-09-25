@@ -140,6 +140,21 @@ pub mod postgres {
     //! Local Postgres lifecycle helpers.
     //! Local Postgres lifecycle helpers.
 
+    /// Number of readiness polls performed before giving up on Postgres startup.
+    pub const DEFAULT_READY_ATTEMPTS: u32 = 80;
+
+    /// Delay between readiness polls.
+    pub const DEFAULT_READY_BACKOFF: Duration = _;
+
+    /// Hostname used for local Postgres connections.
+    pub const LOCALHOST: &str = "localhost";
+
+    /// Maintenance database used for readiness checks.
+    pub const POSTGRES_DATABASE: &str = "postgres";
+
+    /// Binaries required for local Postgres orchestration.
+    pub const REQUIRED_BINS: &[&str] = _;
+
     /// User request for a local Postgres command.
     #[derive(Clone, Debug, Default)]
     pub struct DbRequest {
@@ -281,21 +296,6 @@ pub mod postgres {
 
     /// Stop the workspace Postgres instance if it is running.
     pub fn stop_if_running(config: &PostgresConfig<'_>) -> XtaskResult<bool>;
-
-    /// Number of readiness polls performed before giving up on Postgres startup.
-    pub const DEFAULT_READY_ATTEMPTS: u32 = 80;
-
-    /// Delay between readiness polls.
-    pub const DEFAULT_READY_BACKOFF: Duration = _;
-
-    /// Hostname used for local Postgres connections.
-    pub const LOCALHOST: &str = "localhost";
-
-    /// Maintenance database used for readiness checks.
-    pub const POSTGRES_DATABASE: &str = "postgres";
-
-    /// Binaries required for local Postgres orchestration.
-    pub const REQUIRED_BINS: &[&str] = _;
 }
 
 pub mod web {

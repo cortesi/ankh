@@ -9,6 +9,78 @@
 
 use std::{fmt::Debug, time::Duration};
 
+/// Default page size for admin list endpoints.
+pub const ADMIN_LIST_DEFAULT_LIMIT: i64 = 50;
+
+/// Maximum page size accepted by admin list endpoints.
+pub const ADMIN_LIST_MAX_LIMIT: i64 = 100;
+
+/// Total sysadmin login attempts allowed each minute.
+pub const ADMIN_LOGIN_GLOBAL_RATE_PER_MINUTE: u32 = 10;
+
+/// Default time-to-live for newly issued browser sessions.
+pub const DEFAULT_SESSION_TTL: Duration = _;
+
+/// Default time-to-live for sysadmin tokens.
+pub const DEFAULT_SYSADMIN_TOKEN_TTL: Duration = _;
+
+/// Per-IP device authorization exchange attempts allowed each minute.
+pub const DEVICE_AUTH_EXCHANGE_RATE_PER_MINUTE: u32 = 20;
+
+/// Maximum verification attempts allowed per device authorization grant.
+pub const DEVICE_AUTH_GRANT_MAX_ATTEMPTS: u32 = 5;
+
+/// Time-to-live for device authorization grants.
+pub const DEVICE_AUTH_GRANT_TTL: Duration = _;
+
+/// Maximum length of a device session label.
+pub const DEVICE_NAME_MAX_LEN: usize = 64;
+
+/// Maximum number of concurrent device sessions per user.
+pub const DEVICE_SESSION_LIMIT: u32 = 10;
+
+/// Time-to-live for device sessions.
+pub const DEVICE_SESSION_TTL: Duration = _;
+
+/// Time-to-live for email verification tokens.
+pub const EMAIL_VERIFICATION_TTL: Duration = _;
+
+/// Minimum accepted password length.
+pub const MIN_PASSWORD_LEN: usize = 8;
+
+/// Time-to-live for organization invite links.
+pub const ORG_INVITE_TTL: Duration = _;
+
+/// Total password reset attempts allowed each hour.
+pub const PASSWORD_RESET_GLOBAL_PER_HOUR: u32 = 100;
+
+/// Per-email password reset attempts allowed each hour.
+pub const PASSWORD_RESET_RATE_PER_HOUR: u32 = 10;
+
+/// Time-to-live for password reset tokens.
+pub const PASSWORD_RESET_TTL: Duration = _;
+
+/// Idle interval after which a session touch updates its last-used timestamp.
+pub const SESSION_TOUCH_STALE_AFTER: Duration = _;
+
+/// Total signup attempts allowed each hour.
+pub const SIGNUP_GLOBAL_PER_HOUR: u32 = 100;
+
+/// Per-email signup attempts allowed each hour.
+pub const SIGNUP_RATE_PER_HOUR: u32 = 10;
+
+/// Time-to-live for account invite links created by admins.
+pub const USER_INVITE_TTL: Duration = _;
+
+/// Total login attempts allowed each minute.
+pub const USER_LOGIN_GLOBAL_PER_MINUTE: u32 = 300;
+
+/// Per-email login attempts allowed each minute.
+pub const USER_LOGIN_RATE_PER_MINUTE: u32 = 20;
+
+/// Cooldown between verification resend attempts.
+pub const VERIFICATION_RESEND_COOLDOWN: Duration = _;
+
 /// Admin endpoint defaults.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct AdminConfig {
@@ -86,75 +158,3 @@ pub struct WebSessionConfig {
     /// Idle interval after which a session touch updates `last_seen_at`.
     pub touch_stale_after: Duration,
 }
-
-/// Default page size for admin list endpoints.
-pub const ADMIN_LIST_DEFAULT_LIMIT: i64 = 50;
-
-/// Maximum page size accepted by admin list endpoints.
-pub const ADMIN_LIST_MAX_LIMIT: i64 = 100;
-
-/// Total sysadmin login attempts allowed each minute.
-pub const ADMIN_LOGIN_GLOBAL_RATE_PER_MINUTE: u32 = 10;
-
-/// Default time-to-live for newly issued browser sessions.
-pub const DEFAULT_SESSION_TTL: Duration = _;
-
-/// Default time-to-live for sysadmin tokens.
-pub const DEFAULT_SYSADMIN_TOKEN_TTL: Duration = _;
-
-/// Per-IP device authorization exchange attempts allowed each minute.
-pub const DEVICE_AUTH_EXCHANGE_RATE_PER_MINUTE: u32 = 20;
-
-/// Maximum verification attempts allowed per device authorization grant.
-pub const DEVICE_AUTH_GRANT_MAX_ATTEMPTS: u32 = 5;
-
-/// Time-to-live for device authorization grants.
-pub const DEVICE_AUTH_GRANT_TTL: Duration = _;
-
-/// Maximum length of a device session label.
-pub const DEVICE_NAME_MAX_LEN: usize = 64;
-
-/// Maximum number of concurrent device sessions per user.
-pub const DEVICE_SESSION_LIMIT: u32 = 10;
-
-/// Time-to-live for device sessions.
-pub const DEVICE_SESSION_TTL: Duration = _;
-
-/// Time-to-live for email verification tokens.
-pub const EMAIL_VERIFICATION_TTL: Duration = _;
-
-/// Minimum accepted password length.
-pub const MIN_PASSWORD_LEN: usize = 8;
-
-/// Time-to-live for organization invite links.
-pub const ORG_INVITE_TTL: Duration = _;
-
-/// Total password reset attempts allowed each hour.
-pub const PASSWORD_RESET_GLOBAL_PER_HOUR: u32 = 100;
-
-/// Per-email password reset attempts allowed each hour.
-pub const PASSWORD_RESET_RATE_PER_HOUR: u32 = 10;
-
-/// Time-to-live for password reset tokens.
-pub const PASSWORD_RESET_TTL: Duration = _;
-
-/// Idle interval after which a session touch updates its last-used timestamp.
-pub const SESSION_TOUCH_STALE_AFTER: Duration = _;
-
-/// Total signup attempts allowed each hour.
-pub const SIGNUP_GLOBAL_PER_HOUR: u32 = 100;
-
-/// Per-email signup attempts allowed each hour.
-pub const SIGNUP_RATE_PER_HOUR: u32 = 10;
-
-/// Time-to-live for account invite links created by admins.
-pub const USER_INVITE_TTL: Duration = _;
-
-/// Total login attempts allowed each minute.
-pub const USER_LOGIN_GLOBAL_PER_MINUTE: u32 = 300;
-
-/// Per-email login attempts allowed each minute.
-pub const USER_LOGIN_RATE_PER_MINUTE: u32 = 20;
-
-/// Cooldown between verification resend attempts.
-pub const VERIFICATION_RESEND_COOLDOWN: Duration = _;

@@ -9,6 +9,9 @@
 
 use std::fmt::Debug;
 
+/// Names that may not be used as a namespace in any Ankh consumer.
+pub const SHARED_RESERVED_NAMES: &[&str] = _;
+
 /// Product-specific extension to the shared namespace reservation policy.
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct NamePolicy {/* private fields */}
@@ -55,6 +58,3 @@ pub fn validate_name_format(name: &str) -> Result<(), &'static str>;
 /// Module-level convenience for the default (no product extension) policy; use
 /// [`NamePolicy::validate_namespace_name`] when a product adds reserved names.
 pub fn validate_namespace_name(name: &str) -> Result<(), &'static str>;
-
-/// Names that may not be used as a namespace in any Ankh consumer.
-pub const SHARED_RESERVED_NAMES: &[&str] = _;

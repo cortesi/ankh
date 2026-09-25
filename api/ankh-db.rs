@@ -25,6 +25,9 @@ use chrono::{DateTime, Utc};
 use deadpool_postgres::Object;
 use tokio_postgres::Client;
 use uuid::Uuid;
+/// Current Ankh schema version inserted by [`crate::AnkhDb::initialize`].
+pub const ANKH_SCHEMA_VERSION: i32 = 1;
+
 /// Concrete Postgres-backed Ankh identity database handle.
 #[derive(swc_common::sync::single::Send, swc_common::sync::single::Sync)]
 pub struct AnkhDb {/* private fields */}
@@ -1056,11 +1059,14 @@ pub fn make_cursor(time: &DateTime<Utc>, id: &Uuid) -> String;
 #[must_use]
 pub fn schema_sql() -> &'static str;
 
-/// Current Ankh schema version inserted by [`crate::AnkhDb::initialize`].
-pub const ANKH_SCHEMA_VERSION: i32 = 1;
-
 pub mod test_support {
     //! Test database helpers for Ankh integration tests.
+
+    /// Default local database used for administrative test-database creation.
+    pub const DEFAULT_ADMIN_DATABASE: &str = "postgres";
+
+    /// Default local Postgres port reserved for Ankh tests.
+    pub const DEFAULT_POSTGRES_PORT: u16 = 55_435;
 
     /// Fresh Ankh test database passed to a test callback.
     #[derive(Clone, swc_common::sync::single::Send, swc_common::sync::single::Sync)]
@@ -1124,10 +1130,4 @@ pub mod test_support {
         RunFuture: Future<Output = crate::Result<T>>,
         Seed: FnOnce(AnkhDbPool) -> SeedFuture,
         SeedFuture: Future<Output = crate::Result<()>>;
-
-    /// Default local database used for administrative test-database creation.
-    pub const DEFAULT_ADMIN_DATABASE: &str = "postgres";
-
-    /// Default local Postgres port reserved for Ankh tests.
-    pub const DEFAULT_POSTGRES_PORT: u16 = 55_435;
 }
