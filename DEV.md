@@ -12,7 +12,7 @@
 `cargo nextest` is required for `ncode test`; install it with
 `cargo install cargo-nextest --locked`.
 
-The Ankh frontend workspace uses Node `25.8.1` and pnpm `10.32.1`. Enable
+The Ankh frontend workspace uses Node `26.12.0` and pnpm `10.32.1`. Enable
 Corepack before running frontend commands directly:
 
 ```sh

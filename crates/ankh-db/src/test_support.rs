@@ -8,7 +8,10 @@ use std::{
 
 use tokio_postgres::{Client, Config, NoTls};
 
-use crate::{AnkhDb, AnkhDbPool, Result, pool::create_pg_pool_from_config_with_max_size};
+use crate::{
+    AnkhDb, AnkhDbConfig, AnkhDbPool, PasswordHashing, Result,
+    pool::create_raw_pg_pool_from_config_with_max_size,
+};
 
 /// Default local Postgres port reserved for Ankh tests.
 pub const DEFAULT_POSTGRES_PORT: u16 = 55_435;
@@ -122,10 +125,19 @@ where
     let database_name = next_database_name(config.database_prefix.as_str());
     create_database(&config, database_name.as_str()).await?;
 
-    let pool = create_pg_pool_from_config_with_max_size(
+    let raw_pool = create_raw_pg_pool_from_config_with_max_size(
         config.database_config(database_name.as_str()),
         1,
     )?;
+    // Fresh test databases hash with minimal Argon2 cost; production cost makes
+    // credential-heavy tests slow in unoptimized builds.
+    let pool = AnkhDbPool::from_raw_pool_with_config(
+        raw_pool,
+        AnkhDbConfig {
+            password_hashing: PasswordHashing::testing(),
+            ..AnkhDbConfig::default()
+        },
+    );
     let setup_result = setup_database(&pool, seed).await;
     if setup_result.is_err() {
         drop_database(&config, database_name.as_str()).await?;
