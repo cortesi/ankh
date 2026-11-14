@@ -17,10 +17,6 @@ pub use ankh_types::{
     DeviceAuthGrantId, DevicePlatform, DeviceSessionId, NamespaceId, NamespaceKind, OrgId,
     OrgInviteId, OrgRole, SessionId, SysadminId, UserId,
 };
-use ankh_types::{
-    DeviceAuthGrantId, DevicePlatform, DeviceSessionId, NamespaceId, OrgId, OrgInviteId, OrgRole,
-    SessionId, SysadminId, UserId,
-};
 use chrono::{DateTime, Utc};
 use deadpool_postgres::Object;
 use tokio_postgres::Client;
@@ -611,7 +607,7 @@ pub enum Error {
     Pool(deadpool_postgres::PoolError),
     /// Password hashing failed.
     #[error("password hashing failed: {0}")]
-    PasswordHash(password_hash::errors::Error),
+    PasswordHash(password_hash::error::Error),
     /// Stored waitlist status is not recognized.
     #[error("invalid waitlist status: {0}")]
     InvalidWaitlistStatus(String),
@@ -749,7 +745,7 @@ impl From<deadpool::managed::builder::BuildError> for Error {}
 
 impl From<deadpool::managed::errors::PoolError<tokio_postgres::Error>> for Error {}
 
-impl From<password_hash::errors::Error> for Error {}
+impl From<password_hash::error::Error> for Error {}
 
 impl From<tokio_postgres::Error> for Error {}
 

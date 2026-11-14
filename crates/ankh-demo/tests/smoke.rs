@@ -42,8 +42,9 @@ mod tests {
             )
             .expect("build demo app");
 
-            // Public login as the seeded verified user succeeds and sets a non-Secure
-            // cookie, proving the demo's HTTP-localhost cookie configuration.
+            // Public login as the seeded verified user succeeds and sets a
+            // non-Secure cookie, proving the demo's HTTP-localhost
+            // cookie configuration.
             let login = app
                 .clone()
                 .oneshot(json_request(
@@ -67,8 +68,9 @@ mod tests {
                 "demo cookies must omit Secure for HTTP localhost: {cookie}"
             );
 
-            // A password-reset request renders and sends mail through the DevMailer, which
-            // persists it to the configured directory.
+            // A password-reset request renders and sends mail through the
+            // DevMailer, which persists it to the configured
+            // directory.
             let forgot = app
                 .clone()
                 .oneshot(json_request(
@@ -87,8 +89,9 @@ mod tests {
                 ALICE.email
             );
 
-            // The admin router (the surface ankh-cli drives over HTTP) authenticates the
-            // seeded sysadmin and returns a token.
+            // The admin router (the surface ankh-cli drives over HTTP)
+            // authenticates the seeded sysadmin and returns a
+            // token.
             let admin_login = app
                 .clone()
                 .oneshot(json_request(

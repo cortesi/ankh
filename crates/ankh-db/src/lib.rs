@@ -32,7 +32,9 @@ pub use pool::{
 };
 pub use schema::{ANKH_SCHEMA_VERSION, schema_sql};
 pub use support::{ParsedCursor, PasswordHashing, hash_secret, make_cursor};
-pub(crate) use support::{waitlist_status_from_db, waitlist_status_to_db};
+pub(crate) use support::{
+    fill_random, verify_password, waitlist_status_from_db, waitlist_status_to_db,
+};
 use tokio_postgres::{Client, Row};
 
 /// Configuration attached to an Ankh database handle.

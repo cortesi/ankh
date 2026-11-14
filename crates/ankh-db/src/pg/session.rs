@@ -2,15 +2,11 @@
 
 use std::time::Duration;
 
-use argon2::{
-    Argon2, PasswordVerifier,
-    password_hash::{Error as PasswordError, PasswordHash},
-};
 use uuid::Uuid;
 
 use crate::{
     AnkhDb, Error, ParsedCursor, Result, Session, SessionId, SessionStatus, SessionSummary, UserId,
-    hash_secret, make_cursor,
+    hash_secret, make_cursor, verify_password,
 };
 
 /// Authenticates a user and returns a newly created session identifier.
@@ -56,12 +52,7 @@ pub async fn signin(
         }
     };
 
-    let parsed_hash = PasswordHash::new(&password_hash)?;
-    match Argon2::default().verify_password(password.as_bytes(), &parsed_hash) {
-        Ok(()) => {}
-        Err(PasswordError::Password) => return Err(Error::InvalidCredentials),
-        Err(err) => return Err(Error::PasswordHash(err)),
-    }
+    verify_password(password, &password_hash)?;
 
     let session_id = Uuid::new_v4().to_string();
     delete_expired_sessions(db).await?;

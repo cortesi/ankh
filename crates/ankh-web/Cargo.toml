@@ -11,7 +11,7 @@ ankh-db = { version = "0.0.1", path = "../ankh-db" }
 ankh-mail = { version = "0.0.1", path = "../ankh-mail" }
 ankh-names = { version = "0.0.1", path = "../ankh-names" }
 ankh-types = { version = "0.0.1", path = "../ankh-types" }
-async-trait = "0.1.89"
+async-trait = "0.1.92"
 axum = "0.8.9"
 chrono = { workspace = true, features = ["clock", "std"] }
 governor = "0.10.4"

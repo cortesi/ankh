@@ -2,15 +2,12 @@
 
 use std::time::Duration;
 
-use argon2::{
-    Argon2, PasswordVerifier,
-    password_hash::{Error as PasswordError, PasswordHash},
-};
 use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 use crate::{
     AnkhDb, Error, ParsedCursor, Result, SysadminId, SysadminInfo, hash_secret, make_cursor,
+    verify_password,
 };
 
 /// Creates a new sysadmin account with the given email and password.
@@ -68,12 +65,7 @@ pub async fn sysadmin_login(
         return Err(Error::SysadminDisabled(email.to_owned()));
     }
 
-    let parsed_hash = PasswordHash::new(&password_hash)?;
-    match Argon2::default().verify_password(password.as_bytes(), &parsed_hash) {
-        Ok(()) => {}
-        Err(PasswordError::Password) => return Err(Error::InvalidCredentials),
-        Err(err) => return Err(Error::PasswordHash(err)),
-    }
+    verify_password(password, &password_hash)?;
 
     // Update last_login_at
     db.client

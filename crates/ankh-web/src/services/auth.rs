@@ -178,8 +178,8 @@ pub async fn signup(
     };
 
     // Waitlisted signups confirm nothing yet: skip the verification email so a
-    // waitlist launch needs no real mailer and mints no dead tokens. The account
-    // is verified later, after release.
+    // waitlist launch needs no real mailer and mints no dead tokens. The
+    // account is verified later, after release.
     if !waitlisted {
         let verification_url = state
             .mail()

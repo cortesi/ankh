@@ -3,8 +3,8 @@
 use std::fmt::Write;
 
 use argon2::{
-    Algorithm, Argon2, Params, PasswordHasher, Version,
-    password_hash::{SaltString, rand_core::OsRng},
+    Algorithm, Argon2, Params, PasswordHasher, PasswordVerifier, Version,
+    password_hash::{self, phc::PasswordHash},
 };
 use chrono::{DateTime, Utc};
 use sha2::{Digest, Sha256};
@@ -95,12 +95,27 @@ impl PasswordHashing {
 
     /// Hash a password using the configured parameters and a random salt.
     pub fn hash_password(&self, password: &str) -> Result<String> {
-        let salt = SaltString::generate(&mut OsRng);
         let hasher = Argon2::new(Algorithm::Argon2id, Version::V0x13, self.params.clone());
-        Ok(hasher
-            .hash_password(password.as_bytes(), &salt)?
-            .to_string())
+        let hash: PasswordHash = hasher.hash_password(password.as_bytes())?;
+        Ok(hash.to_string())
     }
+}
+
+/// Verify a password against a stored PHC hash string.
+///
+/// The cost parameters come from the stored hash, so credentials hashed with
+/// older parameters keep verifying.
+pub fn verify_password(password: &str, stored_hash: &str) -> Result<()> {
+    match Argon2::default().verify_password(password.as_bytes(), stored_hash) {
+        Ok(()) => Ok(()),
+        Err(password_hash::Error::PasswordInvalid) => Err(Error::InvalidCredentials),
+        Err(err) => Err(Error::PasswordHash(err)),
+    }
+}
+
+/// Fill a buffer with bytes from the operating system random source.
+pub fn fill_random(buf: &mut [u8]) -> Result<()> {
+    getrandom::fill(buf).map_err(|err| Error::PasswordHash(err.into()))
 }
 
 impl Default for PasswordHashing {
@@ -130,7 +145,50 @@ pub fn hash_secret(secret: &str) -> String {
 mod tests {
     //! Tests for shared database support helpers.
 
-    use super::{ParsedCursor, hash_secret, make_cursor, waitlist_status_from_db};
+    use super::{
+        ParsedCursor, PasswordHashing, hash_secret, make_cursor, verify_password,
+        waitlist_status_from_db,
+    };
+    use crate::Error;
+
+    /// A production-parameter hash written by argon2 0.5, as stored before the
+    /// argon2 0.6 upgrade.
+    const LEGACY_HASH: &str = "$argon2id$v=19$m=19456,t=2,p=1$zwPRMD5DcJmegppRU2PfhQ$Xhy4t6yewpN0Kcs1Rg6cpQ+WkJwcj+xFcew1n5ximxA";
+
+    /// Proves hashes stored by earlier argon2 releases still verify.
+    #[test]
+    fn legacy_hash_verifies() {
+        verify_password("legacy-pass", LEGACY_HASH).expect("legacy hash verifies");
+        assert!(matches!(
+            verify_password("wrong-pass", LEGACY_HASH),
+            Err(Error::InvalidCredentials)
+        ));
+    }
+
+    /// Proves a freshly hashed password verifies and rejects other passwords.
+    #[test]
+    fn hash_round_trip() {
+        let hash = PasswordHashing::testing()
+            .hash_password("fresh-pass")
+            .expect("hash password");
+
+        assert!(hash.starts_with("$argon2id$v=19$"));
+        verify_password("fresh-pass", &hash).expect("fresh hash verifies");
+        assert!(matches!(
+            verify_password("other-pass", &hash),
+            Err(Error::InvalidCredentials)
+        ));
+    }
+
+    /// Proves a malformed stored hash is a hashing error, not a credential
+    /// error.
+    #[test]
+    fn malformed_hash_is_hash_error() {
+        assert!(matches!(
+            verify_password("any", "not-a-phc-string"),
+            Err(Error::PasswordHash(_))
+        ));
+    }
 
     /// Proves secret hashing is deterministic and hex encoded.
     #[test]

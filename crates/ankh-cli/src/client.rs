@@ -456,6 +456,15 @@ fn truncate_body(body: &str) -> String {
     result
 }
 
+/// Parameters for listing organizations.
+#[derive(Debug, Default)]
+pub struct ListOrgsParams {
+    /// Maximum number of orgs to return.
+    pub limit: Option<i64>,
+    /// Pagination cursor.
+    pub cursor: Option<String>,
+}
+
 #[cfg(test)]
 mod tests {
     //! Tests for client response helpers.
@@ -486,13 +495,4 @@ mod tests {
         assert!(out.ends_with("..."));
         assert!(out.len() <= 203);
     }
-}
-
-/// Parameters for listing organizations.
-#[derive(Debug, Default)]
-pub struct ListOrgsParams {
-    /// Maximum number of orgs to return.
-    pub limit: Option<i64>,
-    /// Pagination cursor.
-    pub cursor: Option<String>,
 }

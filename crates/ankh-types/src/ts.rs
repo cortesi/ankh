@@ -145,9 +145,10 @@ pub fn format_typescript_declarations(input: &str, path: impl AsRef<Path>) -> io
     let options = FormatTextOptions {
         config: &fmt_cfg,
         path,
-        text: input.to_owned(),
+        text: input.into(),
         extension: None,
         external_formatter: None,
+        arena_pool: None,
     };
     format_text(options)
         .map_err(|err| io::Error::new(io::ErrorKind::InvalidData, err.to_string()))

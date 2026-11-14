@@ -1616,7 +1616,8 @@ mod tests {
                 .expect("remove response");
             assert_eq!(read_response(remove).await.0, StatusCode::OK);
 
-            // A freshly signed-up invitee accepts the seeded pending org invite.
+            // A freshly signed-up invitee accepts the seeded pending org
+            // invite.
             let invitee = signup_cookie(
                 &harness,
                 PENDING_ORG_INVITE.email,

@@ -3,7 +3,6 @@
 use std::time::Duration;
 
 use ankh_constants::{DEVICE_AUTH_GRANT_MAX_ATTEMPTS, DEVICE_SESSION_LIMIT};
-use argon2::password_hash::rand_core::{OsRng, RngCore};
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
 use chrono::{DateTime, Utc};
 use sha2::{Digest, Sha256};
@@ -11,17 +10,17 @@ use sha2::{Digest, Sha256};
 use crate::{
     AnkhDb, CreatedDeviceAuthGrant, CreatedDeviceSession, DeviceAuthGrant, DeviceAuthGrantId,
     DeviceAuthGrantRequest, DevicePlatform, DeviceSession, DeviceSessionId, DeviceSessionStatus,
-    DeviceSessionSummary, Error, Result, UserId, hash_secret, make_cursor,
+    DeviceSessionSummary, Error, Result, UserId, fill_random, hash_secret, make_cursor,
 };
 
 /// Number of random bytes used for auth codes and session tokens.
 const TOKEN_BYTES: usize = 32;
 
 /// Generate a base64url-encoded random string.
-fn random_base64_url(bytes: usize) -> String {
+fn random_base64_url(bytes: usize) -> Result<String> {
     let mut buf = vec![0u8; bytes];
-    OsRng.fill_bytes(&mut buf);
-    URL_SAFE_NO_PAD.encode(buf)
+    fill_random(&mut buf)?;
+    Ok(URL_SAFE_NO_PAD.encode(buf))
 }
 
 /// Compute the PKCE S256 challenge for the supplied verifier.
@@ -77,7 +76,7 @@ pub async fn create_device_auth_grant(
 ) -> Result<CreatedDeviceAuthGrant> {
     delete_expired_device_auth_grants(db).await?;
 
-    let code = random_base64_url(TOKEN_BYTES);
+    let code = random_base64_url(TOKEN_BYTES)?;
     let code_hash = hash_secret(code.as_str());
     let ttl_seconds: i64 = request.ttl.as_secs().try_into().unwrap_or(i64::MAX);
 
@@ -226,7 +225,7 @@ pub async fn create_device_session(
         return Err(Error::DeviceSessionLimitReached(user_id.to_string()));
     }
 
-    let token = random_base64_url(TOKEN_BYTES);
+    let token = random_base64_url(TOKEN_BYTES)?;
     let token_hash = hash_secret(token.as_str());
     let ttl_seconds: i64 = ttl.as_secs().try_into().unwrap_or(i64::MAX);
 

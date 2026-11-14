@@ -459,7 +459,8 @@ mod tests {
                 .await;
             }
 
-            // Users: invite (waitlist bypass) and release of a waitlisted account.
+            // Users: invite (waitlist bypass) and release of a waitlisted
+            // account.
             run_saved(
                 &config_path,
                 CommonCommand::Users {
@@ -485,7 +486,8 @@ mod tests {
             )
             .await;
 
-            // Orgs: create, update, add member, set role, transfer, remove member, delete.
+            // Orgs: create, update, add member, set role, transfer, remove
+            // member, delete.
             run_saved(
                 &config_path,
                 CommonCommand::Orgs {
