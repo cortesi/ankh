@@ -77,11 +77,11 @@ export function createJsonRequest(fetchImpl: typeof fetch = fetch): JsonRequest 
   return async function jsonRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
     const response = await fetchImpl(path, {
       credentials: "same-origin",
+      ...init,
       headers: {
         "Content-Type": "application/json",
         ...init.headers,
       },
-      ...init,
     });
 
     if (!response.ok) {

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 
-import type { AnkhApi } from "./api";
+import { createJsonRequest, type AnkhApi } from "./api";
 import type { DeviceSessionInfo, InviteInfo, MemberInfo, OrgInfo, UserInfo } from "@ankh/types";
 import React from "react";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -590,5 +590,17 @@ describe("useOrg", () => {
 
     expect(await screen.findByText(ORG.name)).toBeInTheDocument();
     expect(seen).not.toContain("missing");
+  });
+});
+
+describe("createJsonRequest", () => {
+  it("keeps the JSON content type when a caller adds headers", async () => {
+    const fetchImpl = vi.fn(async () => new Response("{}", { status: 200 }));
+    await createJsonRequest(fetchImpl as unknown as typeof fetch)("/x", {
+      headers: { "X-Trace": "1" },
+      method: "POST",
+    });
+    const init = fetchImpl.mock.calls[0]?.[1] as RequestInit;
+    expect(init.headers).toEqual({ "Content-Type": "application/json", "X-Trace": "1" });
   });
 });
