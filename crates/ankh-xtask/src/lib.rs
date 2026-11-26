@@ -2,10 +2,10 @@
 
 //! Shared developer-task building blocks for Ankh and leaf workspaces.
 
-mod cargo_env;
-
 /// Dev admin CLI helpers.
 pub mod admin;
+/// Child Cargo commands without inherited package identity.
+pub mod cargo_env;
 /// Command execution helpers.
 pub mod command;
 /// Frontend package-manager helpers.

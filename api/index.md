@@ -105,5 +105,5 @@ Shared developer-task building blocks for Ankh and leaf workspaces.
 - Binaries: ankh-xtask
 - Workspace dependencies: ankh-db
 - Workspace dependents: none
-- Items: 55
+- Items: 56
 - Exposes: none

@@ -10,6 +10,7 @@
 
 use std::{
     error::Error,
+    ffi::OsStr,
     fmt::Debug,
     path::{Path, PathBuf},
     process::{Command, ExitStatus},
@@ -71,6 +72,14 @@ pub mod admin {
 
     /// Run a leaf CLI package through Cargo with the supplied arguments.
     pub fn run_cli(cli: &CargoAdminCli, args: &[String]) -> XtaskResult;
+}
+
+pub mod cargo_env {
+    //! Child Cargo commands without inherited package identity.
+    //! Child Cargo commands without inherited package identity.
+
+    /// Preserve build settings and remove the launching package's Cargo metadata.
+    pub fn command(program: impl AsRef<OsStr>) -> Command;
 }
 
 pub mod command {
