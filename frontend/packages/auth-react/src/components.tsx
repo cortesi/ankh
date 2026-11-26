@@ -878,32 +878,45 @@ export function canManageOrg(org: OrgInfo) {
 export function useOrg(id: string | null | undefined, enabled = true) {
   const api = useAnkhApi();
   const { setCurrentOrgId } = useCurrentOrg();
-  const [org, setOrg] = useState<OrgInfo | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // The result for one id. The org is loading until a result for the current
+  // id arrives, so a page never shows a missing org, or the previous org, while
+  // a request is in flight.
+  const [loaded, setLoaded] = useState<{
+    id: string;
+    org: OrgInfo | null;
+    error: string | null;
+  } | null>(null);
 
   useEffect(() => {
     if (!enabled || !id) {
-      setOrg(null);
-      setIsLoading(false);
       return;
     }
-    setIsLoading(true);
+    let current = true;
     void api.orgs
       .getOrg(id)
       .then((nextOrg) => {
-        setOrg(nextOrg);
-        setCurrentOrgId(nextOrg.id);
-        setError(null);
+        if (current) {
+          setLoaded({ error: null, id, org: nextOrg });
+          setCurrentOrgId(nextOrg.id);
+        }
       })
       .catch((caught) => {
-        setOrg(null);
-        setError(asMessage(caught));
-      })
-      .finally(() => setIsLoading(false));
+        if (current) {
+          setLoaded({ error: asMessage(caught), id, org: null });
+        }
+      });
+    return () => {
+      current = false;
+    };
   }, [api, enabled, id, setCurrentOrgId]);
 
-  return { error, isLoading, org };
+  const active = Boolean(enabled && id);
+  const result = active && loaded?.id === id ? loaded : null;
+  return {
+    error: result?.error ?? null,
+    isLoading: active && result === null,
+    org: result?.org ?? null,
+  };
 }
 
 function Notice({ error, success }: { error?: string | null; success?: string | null }) {

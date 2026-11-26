@@ -17,6 +17,7 @@ import {
   SignupPage,
   VerificationBanner,
   VerifyEmailPage,
+  useOrg,
 } from "./components";
 import {
   AnkhApiProvider,
@@ -568,5 +569,26 @@ describe("@ankh/auth-react", () => {
       await screen.findByText("If an account exists, a reset link is on its way."),
     ).toBeInTheDocument();
     expect(requestPasswordReset).toHaveBeenCalledWith("alice@example.com");
+  });
+});
+
+function OrgProbe({ id, seen }: { id: string; seen: string[] }) {
+  const { isLoading, org } = useOrg(id);
+  const view = isLoading ? "loading" : (org?.name ?? "missing");
+  seen.push(view);
+  return <span>{view}</span>;
+}
+
+describe("useOrg", () => {
+  it("reports loading, never a missing org, before the org arrives", async () => {
+    const seen: string[] = [];
+    renderWithAuth(
+      <CurrentOrgProvider storageKey={null}>
+        <OrgProbe id={ORG.id} seen={seen} />
+      </CurrentOrgProvider>,
+    );
+
+    expect(await screen.findByText(ORG.name)).toBeInTheDocument();
+    expect(seen).not.toContain("missing");
   });
 });
