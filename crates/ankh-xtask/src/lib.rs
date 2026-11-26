@@ -4,7 +4,7 @@
 
 /// Dev admin CLI helpers.
 pub mod admin;
-/// Child Cargo commands without inherited package identity.
+/// Child Cargo command helpers.
 pub mod cargo_env;
 /// Command execution helpers.
 pub mod command;

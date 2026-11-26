@@ -75,7 +75,7 @@ pub mod admin {
 }
 
 pub mod cargo_env {
-    //! Child Cargo commands without inherited package identity.
+    //! Child Cargo command helpers.
     //! Child Cargo commands without inherited package identity.
 
     /// Preserve build settings and remove the launching package's Cargo metadata.
