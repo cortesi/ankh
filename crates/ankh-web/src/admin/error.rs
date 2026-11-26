@@ -7,6 +7,8 @@ use axum::{
 };
 use serde::Serialize;
 
+use crate::errors;
+
 /// Admin API error response body.
 #[derive(Debug, Serialize)]
 pub struct AdminErrorResponse {
@@ -108,12 +110,23 @@ impl AdminError {
 
 impl IntoResponse for AdminError {
     fn into_response(self) -> Response {
+        let (message, details) = if self.status == StatusCode::INTERNAL_SERVER_ERROR {
+            tracing::error!(
+                error = %self.message,
+                details = ?self.details,
+                request_id = ?self.request_id,
+                "internal admin error"
+            );
+            (errors::INTERNAL_ERROR.to_owned(), None)
+        } else {
+            (self.message, self.details)
+        };
         let body = AdminErrorResponse {
             request_id: self.request_id,
             error: AdminErrorDetail {
                 code: self.code,
-                message: self.message,
-                details: self.details,
+                message,
+                details,
             },
         };
         (self.status, Json(body)).into_response()
@@ -122,3 +135,26 @@ impl IntoResponse for AdminError {
 
 /// Result type for admin API handlers.
 pub type AdminResult<T> = Result<T, AdminError>;
+
+#[cfg(test)]
+mod tests {
+    use axum::body::to_bytes;
+    use serde_json::Value;
+
+    use super::*;
+
+    #[tokio::test]
+    async fn internal_errors_hide_their_cause() {
+        let response = AdminError::internal("database error: connection refused")
+            .with_request_id("req-1")
+            .into_response();
+        assert_eq!(response.status(), StatusCode::INTERNAL_SERVER_ERROR);
+        let body = to_bytes(response.into_body(), usize::MAX)
+            .await
+            .expect("read body");
+        let body: Value = serde_json::from_slice(&body).expect("json body");
+        assert_eq!(body["request_id"], "req-1");
+        assert_eq!(body["error"]["message"], errors::INTERNAL_ERROR);
+        assert!(body["error"].get("details").is_none());
+    }
+}

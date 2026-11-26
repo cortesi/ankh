@@ -26,6 +26,9 @@ pub const RESEND_TOO_SOON: &str = "Please wait before requesting another email";
 pub const UNAUTHORIZED: &str = "Please log in";
 /// Error shown when a waitlisted user attempts to use the product.
 pub const WAITLISTED: &str = "You're on the waitlist. We'll email you when your account is ready.";
+/// Message of every 500 response. The cause goes to the server log instead, so
+/// database and storage errors do not reach the client.
+pub const INTERNAL_ERROR: &str = "Internal server error";
 /// Error shown when rate limits are exceeded.
 pub const RATE_LIMITED: &str = "Too many requests. Please try again later.";
 /// Error shown when an org name is already taken.
