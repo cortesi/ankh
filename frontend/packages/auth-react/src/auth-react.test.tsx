@@ -27,7 +27,7 @@ import {
   useAuth,
   useCurrentOrg,
 } from "./context";
-import { validateEmail, validateOrgName, validatePassword } from "./validation";
+import { validateEmail, validateOrgName, validatePassword, validateUsername } from "./validation";
 
 const USER: UserInfo = {
   username: "alice",
@@ -165,6 +165,9 @@ describe("@ankh/auth-react", () => {
     expect(validateEmail("bad")).toBe("Invalid email address");
     expect(validatePassword("short")).toBe("Password too short");
     expect(validateOrgName("api")).toBe("This name is reserved");
+    expect(validateOrgName("control")).toBeNull();
+    expect(validateOrgName("control", ["control"])).toBe("This name is reserved");
+    expect(validateUsername("control", ["control"])).toBe("This username is reserved");
     expect(validateOrgName("valid-org")).toBeNull();
   });
 

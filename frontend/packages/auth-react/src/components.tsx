@@ -71,6 +71,13 @@ export interface NewOrgFormProps {
   className?: string;
   onCreated?: (org: OrgInfo) => void | Promise<void>;
   notify?: Notify;
+  /** Namespace names that the product reserves beyond Ankh's shared list. */
+  reservedNames?: readonly string[];
+}
+
+export interface SignupPageProps extends SharedPageProps {
+  /** Namespace names that the product reserves beyond Ankh's shared list. */
+  reservedNames?: readonly string[];
 }
 
 export interface VerificationBannerProps {
@@ -179,7 +186,8 @@ export function SignupPage({
   dashboardPath = "/dashboard",
   frame = DefaultFrame,
   loginPath = "/login",
-}: SharedPageProps) {
+  reservedNames = [],
+}: SignupPageProps) {
   const api = useAnkhApi();
   const { signup, user } = useAuth();
   const navigate = useNavigate();
@@ -222,7 +230,7 @@ export function SignupPage({
           onSubmit={async (event) => {
             event.preventDefault();
             const emailError = validateEmail(email);
-            const usernameError = validateUsername(username);
+            const usernameError = validateUsername(username, reservedNames);
             const passwordError = validatePassword(password);
             if (emailError || usernameError || passwordError) {
               setError(emailError ?? usernameError ?? passwordError);
@@ -582,7 +590,7 @@ export function AcceptOrgInvitePage({
   });
 }
 
-export function NewOrgForm({ className, notify, onCreated }: NewOrgFormProps) {
+export function NewOrgForm({ className, notify, onCreated, reservedNames = [] }: NewOrgFormProps) {
   const api = useAnkhApi();
   const { reload, setCurrentOrgId } = useCurrentOrg();
   const [name, setName] = useState("");
@@ -601,7 +609,7 @@ export function NewOrgForm({ className, notify, onCreated }: NewOrgFormProps) {
           onSubmit={async (event) => {
             event.preventDefault();
             const normalizedName = normalizeName(name);
-            const nameError = validateOrgName(normalizedName);
+            const nameError = validateOrgName(normalizedName, reservedNames);
             if (nameError) {
               setError(nameError);
               return;

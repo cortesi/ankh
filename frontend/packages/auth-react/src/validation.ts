@@ -1,58 +1,11 @@
-const RESERVED_NAMESPACE_NAMES = new Set([
-  "api",
-  "admin",
-  "healthz",
-  "assets",
-  "static",
-  "dev",
-  "login",
-  "logout",
-  "signup",
-  "signin",
-  "signout",
-  "register",
-  "verify-email",
-  "forgot-password",
-  "reset-password",
-  "waitlist",
-  "dashboard",
-  "settings",
-  "account",
-  "profile",
-  "console",
-  "org",
-  "orgs",
-  "organization",
-  "organizations",
-  "team",
-  "teams",
-  "user",
-  "users",
-  "member",
-  "members",
-  "new",
-  "create",
-  "edit",
-  "delete",
-  "remove",
-  "www",
-  "mail",
-  "ftp",
-  "smtp",
-  "imap",
-  "pop",
-  "support",
-  "help",
-  "info",
-  "contact",
-  "billing",
-  "sales",
-  "root",
-  "system",
-  "null",
-  "undefined",
-  "anonymous",
-]);
+import { SHARED_RESERVED_NAMES } from "./generated-names";
+
+const RESERVED_NAMESPACE_NAMES: ReadonlySet<string> = new Set(SHARED_RESERVED_NAMES);
+
+/** Whether `name` is reserved by Ankh's shared list or by the product's `productReserved`. */
+function isReserved(name: string, productReserved: readonly string[]) {
+  return RESERVED_NAMESPACE_NAMES.has(name) || productReserved.includes(name);
+}
 
 export const PASSWORD_MIN_LENGTH = 8;
 
@@ -88,25 +41,27 @@ export function validatePassword(value: string) {
   return null;
 }
 
-export function validateUsername(value: string) {
+/** Validate a username. `productReserved` adds the product's reserved names to the shared list. */
+export function validateUsername(value: string, productReserved: readonly string[] = []) {
   const normalized = normalizeName(value);
   const formatError = validateNameFormat(normalized);
   if (formatError) {
     return formatError;
   }
-  if (RESERVED_NAMESPACE_NAMES.has(normalized)) {
+  if (isReserved(normalized, productReserved)) {
     return "This username is reserved";
   }
   return null;
 }
 
-export function validateOrgName(value: string) {
+/** Validate an organization name. `productReserved` is as for `validateUsername`. */
+export function validateOrgName(value: string, productReserved: readonly string[] = []) {
   const normalized = normalizeName(value);
   const formatError = validateNameFormat(normalized);
   if (formatError) {
     return formatError;
   }
-  if (RESERVED_NAMESPACE_NAMES.has(normalized)) {
+  if (isReserved(normalized, productReserved)) {
     return "This name is reserved";
   }
   return null;

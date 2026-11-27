@@ -176,9 +176,11 @@ pub fn is_reserved_namespace_name(name: &str) -> bool {
 mod tests {
     //! Tests for shared name validation and policy composition.
 
+    use std::{fs, path::PathBuf};
+
     use super::{
-        NamePolicy, is_reserved_namespace_name, normalize_name, validate_name_format,
-        validate_namespace_name,
+        NamePolicy, SHARED_RESERVED_NAMES, is_reserved_namespace_name, normalize_name,
+        validate_name_format, validate_namespace_name,
     };
 
     /// Expected error for short names.
@@ -270,5 +272,44 @@ mod tests {
         assert!(policy.is_reserved_namespace_name("api"));
         assert_eq!(policy.validate_namespace_name("soundscape"), Err(RESERVED));
         assert!(policy.validate_namespace_name("example").is_ok());
+    }
+
+    /// Path of the TypeScript copy of the shared names, from this crate.
+    const TYPESCRIPT_NAMES_PATH: &str = "../../frontend/packages/auth-react/src/generated-names.ts";
+
+    /// Render the TypeScript module of the shared reserved names, which
+    /// `@ankh/auth-react` validates against.
+    fn typescript_names_module() -> String {
+        let names: String = SHARED_RESERVED_NAMES
+            .iter()
+            .map(|name| format!("  \"{name}\",\n"))
+            .collect();
+        format!(
+            "// Generated from ankh-names by its export_typescript_names test. Do not edit by \
+             hand.\n\n\
+             /** Namespace names that every Ankh product reserves. */\n\
+             export const SHARED_RESERVED_NAMES: readonly string[] = [\n{names}];\n"
+        )
+    }
+
+    fn typescript_names_path() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(TYPESCRIPT_NAMES_PATH)
+    }
+
+    #[test]
+    #[ignore = "writes frontend/packages/auth-react/src/generated-names.ts"]
+    fn export_typescript_names() {
+        fs::write(typescript_names_path(), typescript_names_module())
+            .expect("write generated-names.ts");
+    }
+
+    #[test]
+    fn generated_typescript_names_are_current() {
+        let current = fs::read_to_string(typescript_names_path()).expect("read generated-names.ts");
+        assert!(
+            current == typescript_names_module(),
+            "frontend/packages/auth-react/src/generated-names.ts is stale; regenerate it with \
+             `cargo test -p ankh-names -- --ignored tests::export_typescript_names --exact`"
+        );
     }
 }
